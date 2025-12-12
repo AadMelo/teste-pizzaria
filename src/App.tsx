@@ -14,6 +14,7 @@ import TermsOfUse from "./pages/TermsOfUse";
 import WorkWithUs from "./pages/WorkWithUs";
 import OrderHistory from "./pages/OrderHistory";
 import OrderTracking from "./pages/OrderTracking";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
                 <Route path="/trabalhe-conosco" element={<WorkWithUs />} />
                 <Route path="/pedidos" element={<OrderHistory />} />
                 <Route path="/pedido/:orderId" element={<OrderTracking />} />
+                <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
