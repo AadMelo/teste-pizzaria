@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import Header from '@/components/Header';
 import Banner from '@/components/Banner';
+import HeroHighlights from '@/components/HeroHighlights';
 import StoreInfo from '@/components/StoreInfo';
 import HowItWorks from '@/components/HowItWorks';
 import SpecialOffers from '@/components/SpecialOffers';
@@ -115,6 +116,15 @@ export default function Index() {
           transition={{ duration: 0.5, delay: 0.1 }}
         >
           <Banner onCategorySelect={handleBannerCategorySelect} />
+        </motion.div>
+
+        {/* Strategic Hero Highlights */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+        >
+          <HeroHighlights />
         </motion.div>
         
         {/* Store Info Bar + Features */}
