@@ -14,6 +14,7 @@ import ProductCard from '@/components/ProductCard';
 import PizzaBuilder from '@/components/PizzaBuilder';
 import Testimonials from '@/components/Testimonials';
 import Footer from '@/components/Footer';
+import SocialProofNotification from '@/components/SocialProofNotification';
 import { pizzas, products, Pizza, Product } from '@/data/pizzaData';
 import { useCart } from '@/contexts/CartContext';
 import { useOrderNotifications } from '@/hooks/useOrderNotifications';
@@ -297,6 +298,9 @@ export default function Index() {
         onClose={handleCloseBuilder}
         initialPizza={selectedPizza || undefined}
       />
+
+      {/* Social Proof Notifications */}
+      <SocialProofNotification />
     </motion.div>
   );
 }
