@@ -36,14 +36,14 @@ interface Order {
 }
 
 const orderStatuses = [
-  { key: 'pending', label: 'Pendente', icon: Clock, color: 'bg-yellow-500', textColor: 'text-yellow-500', description: 'Aguardando confirmação' },
-  { key: 'pending_payment', label: 'Aguardando Pagamento', icon: Wallet, color: 'bg-orange-500', textColor: 'text-orange-500', description: 'PIX pendente' },
-  { key: 'confirmed', label: 'Confirmado', icon: CheckCircle2, color: 'bg-blue-500', textColor: 'text-blue-500', description: 'Pagamento confirmado' },
-  { key: 'preparing', label: 'Preparando', icon: ChefHat, color: 'bg-purple-500', textColor: 'text-purple-500', description: 'Na cozinha' },
-  { key: 'ready', label: 'Pronto', icon: Package, color: 'bg-indigo-500', textColor: 'text-indigo-500', description: 'Pronto para entrega' },
-  { key: 'delivering', label: 'Em Entrega', icon: Truck, color: 'bg-cyan-500', textColor: 'text-cyan-500', description: 'A caminho' },
-  { key: 'delivered', label: 'Entregue', icon: CheckCircle2, color: 'bg-emerald-500', textColor: 'text-emerald-500', description: 'Finalizado' },
-  { key: 'cancelled', label: 'Cancelado', icon: XCircle, color: 'bg-red-500', textColor: 'text-red-500', description: 'Pedido cancelado' },
+  { key: 'pending', label: 'Pendente', shortLabel: 'Pend.', icon: Clock, color: 'bg-yellow-500', textColor: 'text-yellow-500', description: 'Aguardando confirmação' },
+  { key: 'pending_payment', label: 'Aguardando Pagamento', shortLabel: 'Pag.', icon: Wallet, color: 'bg-orange-500', textColor: 'text-orange-500', description: 'PIX pendente' },
+  { key: 'confirmed', label: 'Confirmado', shortLabel: 'Conf.', icon: CheckCircle2, color: 'bg-blue-500', textColor: 'text-blue-500', description: 'Pagamento confirmado' },
+  { key: 'preparing', label: 'Preparando', shortLabel: 'Prep.', icon: ChefHat, color: 'bg-purple-500', textColor: 'text-purple-500', description: 'Na cozinha' },
+  { key: 'ready', label: 'Pronto', shortLabel: 'Pronto', icon: Package, color: 'bg-indigo-500', textColor: 'text-indigo-500', description: 'Pronto para entrega' },
+  { key: 'delivering', label: 'Em Entrega', shortLabel: 'Entreg.', icon: Truck, color: 'bg-cyan-500', textColor: 'text-cyan-500', description: 'A caminho' },
+  { key: 'delivered', label: 'Entregue', shortLabel: 'Feito', icon: CheckCircle2, color: 'bg-emerald-500', textColor: 'text-emerald-500', description: 'Finalizado' },
+  { key: 'cancelled', label: 'Cancelado', shortLabel: 'Canc.', icon: XCircle, color: 'bg-red-500', textColor: 'text-red-500', description: 'Pedido cancelado' },
 ];
 
 const getStatusConfig = (status: string) => {
@@ -283,16 +283,16 @@ export const AdminOrders = () => {
               size="sm"
               onClick={() => setStatusFilter(status.key)}
               className={cn(
-                "justify-start gap-2",
+                "justify-start gap-1 text-xs sm:text-sm",
                 isActive 
                   ? `${status.color} hover:opacity-90 text-white` 
                   : 'border-zinc-700 bg-black/40 text-zinc-300 hover:bg-zinc-800'
               )}
             >
-              <Icon className="h-4 w-4" />
-              <span className="hidden xl:inline">{status.label}</span>
-              <span className="xl:hidden">{count}</span>
-              <span className="hidden xl:inline">({count})</span>
+              <Icon className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+              <span className="hidden lg:inline truncate">{status.label}</span>
+              <span className="lg:hidden truncate">{status.shortLabel}</span>
+              <span className="flex-shrink-0">({count})</span>
             </Button>
           );
         })}
