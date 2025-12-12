@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 export default function Auth() {
@@ -17,11 +18,30 @@ export default function Auth() {
   const { user, signIn, signUp } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user) {
+  // Check if user is admin and redirect accordingly
+  const checkAdminAndRedirect = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('user_roles' as any)
+        .select('role')
+        .eq('user_id', userId)
+        .single();
+
+      if (!error && (data as any)?.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
+    } catch {
       navigate('/');
     }
-  }, [user, navigate]);
+  };
+
+  useEffect(() => {
+    if (user) {
+      checkAdminAndRedirect(user.id);
+    }
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +59,7 @@ export default function Auth() {
           return;
         }
         toast.success('Bem-vindo de volta!');
+        // Redirect will happen via useEffect when user state updates
       } else {
         if (!name.trim()) {
           toast.error('Informe seu nome');
@@ -58,8 +79,8 @@ export default function Auth() {
           return;
         }
         toast.success('Conta criada com sucesso! Você ganhou 50 pontos de boas-vindas! 🎉');
+        navigate('/');
       }
-      navigate('/');
     } finally {
       setIsLoading(false);
     }
