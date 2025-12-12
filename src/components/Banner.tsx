@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Flame, Gift, Truck, Clock, Star, Percent, Pizza } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Flame, Gift, Truck, Clock, Star, Percent, Pizza, Sparkles, Calendar, Moon, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Import custom banner images
@@ -10,6 +10,10 @@ import bannerDesconto from '@/assets/banner-desconto.jpg';
 import bannerHappyHour from '@/assets/banner-happy-hour.jpg';
 import bannerPremium from '@/assets/banner-premium.jpg';
 import bannerDoces from '@/assets/banner-doces.jpg';
+import bannerPrimeiraCompra from '@/assets/banner-primeira-compra.jpg';
+import bannerFidelidade from '@/assets/banner-fidelidade.jpg';
+import bannerFimSemana from '@/assets/banner-fim-semana.jpg';
+import bannerNoturno from '@/assets/banner-noturno.jpg';
 
 const banners = [
   {
@@ -27,6 +31,19 @@ const banners = [
   },
   {
     id: 2,
+    title: 'PRIMEIRA COMPRA',
+    subtitle: '15% OFF no primeiro pedido',
+    description: 'Use o cupom: BEMVINDO15',
+    badge: 'NOVOS CLIENTES',
+    badgeColor: 'bg-emerald-600',
+    image: bannerPrimeiraCompra,
+    gradient: 'from-emerald-900/90 via-emerald-800/70 to-transparent',
+    accentColor: 'text-emerald-400',
+    icon: Sparkles,
+    action: 'pizzas',
+  },
+  {
+    id: 3,
     title: 'COMBO FAMÍLIA',
     subtitle: '2 Pizzas + Refri 2L',
     description: 'Por apenas R$ 89,90',
@@ -39,7 +56,7 @@ const banners = [
     action: 'pizzas',
   },
   {
-    id: 3,
+    id: 4,
     title: 'FRETE GRÁTIS',
     subtitle: 'Pedidos acima de R$ 60',
     description: 'Entrega em até 45 min',
@@ -52,7 +69,20 @@ const banners = [
     action: 'pizzas',
   },
   {
-    id: 4,
+    id: 5,
+    title: 'CLUBE VIP',
+    subtitle: 'Ganhe pontos a cada pedido',
+    description: 'Troque por pizzas grátis!',
+    badge: 'FIDELIDADE',
+    badgeColor: 'bg-yellow-600',
+    image: bannerFidelidade,
+    gradient: 'from-yellow-900/90 via-yellow-800/70 to-transparent',
+    accentColor: 'text-yellow-400',
+    icon: Crown,
+    action: 'pizzas',
+  },
+  {
+    id: 6,
     title: 'CUPOM: PROMO10',
     subtitle: '10% OFF em todo pedido',
     description: 'Use o cupom no carrinho!',
@@ -65,7 +95,20 @@ const banners = [
     action: 'pizzas',
   },
   {
-    id: 5,
+    id: 7,
+    title: 'FIM DE SEMANA',
+    subtitle: 'Sábado e Domingo especiais',
+    description: '3ª pizza com 50% OFF',
+    badge: 'PROMOÇÃO',
+    badgeColor: 'bg-teal-600',
+    image: bannerFimSemana,
+    gradient: 'from-teal-900/90 via-teal-800/70 to-transparent',
+    accentColor: 'text-teal-400',
+    icon: Calendar,
+    action: 'pizzas',
+  },
+  {
+    id: 8,
     title: 'HAPPY HOUR',
     subtitle: '18h às 20h',
     description: 'Todas as pizzas com 15% OFF',
@@ -78,7 +121,20 @@ const banners = [
     action: 'pizzas',
   },
   {
-    id: 6,
+    id: 9,
+    title: 'NOITE ESPECIAL',
+    subtitle: 'Após as 21h',
+    description: 'Bordas recheadas grátis!',
+    badge: 'NOTURNO',
+    badgeColor: 'bg-indigo-600',
+    image: bannerNoturno,
+    gradient: 'from-indigo-900/90 via-indigo-800/70 to-transparent',
+    accentColor: 'text-indigo-400',
+    icon: Moon,
+    action: 'pizzas',
+  },
+  {
+    id: 10,
     title: 'PIZZAS PREMIUM',
     subtitle: 'Ingredientes selecionados',
     description: 'Qualidade 5 estrelas ⭐',
@@ -91,7 +147,7 @@ const banners = [
     action: 'pizzas',
   },
   {
-    id: 7,
+    id: 11,
     title: 'PIZZAS DOCES',
     subtitle: 'Chocolate, Prestígio, Nutella',
     description: 'A partir de R$ 36,90',
