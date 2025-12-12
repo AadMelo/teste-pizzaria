@@ -191,13 +191,19 @@ export const AdminRevenue = () => {
   return (
     <div className="space-y-6">
       {/* Period selector */}
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">Dashboard de Faturamento</h3>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+            <TrendingUp className="h-6 w-6 text-orange-400" />
+            Dashboard de Faturamento
+          </h2>
+          <p className="text-zinc-400 text-sm mt-1">Acompanhe as métricas de vendas em tempo real</p>
+        </div>
         <Select value={period} onValueChange={setPeriod}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px] bg-black/40 border-zinc-700 text-white">
             <SelectValue placeholder="Selecionar período" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-zinc-900 border-zinc-700">
             <SelectItem value="7">Últimos 7 dias</SelectItem>
             <SelectItem value="14">Últimos 14 dias</SelectItem>
             <SelectItem value="30">Últimos 30 dias</SelectItem>
@@ -209,59 +215,59 @@ export const AdminRevenue = () => {
 
       {/* Stats cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
+        <Card className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border-emerald-500/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-emerald-300/80 flex items-center gap-2">
               <DollarSign className="h-4 w-4" />
               Faturamento Total
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              R$ {stats.totalRevenue.toFixed(2)}
+            <div className="text-2xl font-bold text-white">
+              R$ {stats.totalRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
             </div>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="bg-gradient-to-br from-orange-500/20 to-orange-600/10 border-orange-500/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-orange-300/80 flex items-center gap-2">
               <ShoppingBag className="h-4 w-4" />
               Total de Pedidos
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalOrders}</div>
+            <div className="text-2xl font-bold text-white">{stats.totalOrders}</div>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="bg-gradient-to-br from-violet-500/20 to-violet-600/10 border-violet-500/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-violet-300/80 flex items-center gap-2">
               <Pizza className="h-4 w-4" />
               Ticket Médio
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold text-white">
               R$ {stats.averageTicket.toFixed(2)}
             </div>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="bg-gradient-to-br from-cyan-500/20 to-cyan-600/10 border-cyan-500/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-cyan-300/80 flex items-center gap-2">
               {stats.growthRate >= 0 ? (
-                <TrendingUp className="h-4 w-4 text-green-500" />
+                <TrendingUp className="h-4 w-4" />
               ) : (
-                <TrendingDown className="h-4 w-4 text-red-500" />
+                <TrendingDown className="h-4 w-4" />
               )}
               Crescimento
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${stats.growthRate >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <div className={`text-2xl font-bold ${stats.growthRate >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
               {stats.growthRate >= 0 ? '+' : ''}{stats.growthRate.toFixed(1)}%
             </div>
           </CardContent>
@@ -271,9 +277,9 @@ export const AdminRevenue = () => {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Revenue chart */}
-        <Card>
+        <Card className="bg-black/40 border-zinc-800">
           <CardHeader>
-            <CardTitle>Faturamento por Dia</CardTitle>
+            <CardTitle className="text-white">Faturamento por Dia</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[300px]">
@@ -285,12 +291,13 @@ export const AdminRevenue = () => {
                       <stop offset="95%" stopColor="#f97316" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                  <XAxis dataKey="date" stroke="#666" />
+                  <YAxis stroke="#666" />
                   <Tooltip 
                     formatter={(value: number) => [`R$ ${value.toFixed(2)}`, 'Faturamento']}
-                    labelStyle={{ color: '#000' }}
+                    contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333', borderRadius: '8px' }}
+                    labelStyle={{ color: '#fff' }}
                   />
                   <Area 
                     type="monotone" 
@@ -306,20 +313,21 @@ export const AdminRevenue = () => {
         </Card>
 
         {/* Orders chart */}
-        <Card>
+        <Card className="bg-black/40 border-zinc-800">
           <CardHeader>
-            <CardTitle>Pedidos por Dia</CardTitle>
+            <CardTitle className="text-white">Pedidos por Dia</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={dailyData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                  <XAxis dataKey="date" stroke="#666" />
+                  <YAxis stroke="#666" />
                   <Tooltip 
                     formatter={(value: number) => [value, 'Pedidos']}
-                    labelStyle={{ color: '#000' }}
+                    contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333', borderRadius: '8px' }}
+                    labelStyle={{ color: '#fff' }}
                   />
                   <Bar dataKey="orders" fill="#f97316" radius={[4, 4, 0, 0]} />
                 </BarChart>
@@ -329,23 +337,24 @@ export const AdminRevenue = () => {
         </Card>
 
         {/* Hourly chart */}
-        <Card>
+        <Card className="bg-black/40 border-zinc-800">
           <CardHeader>
-            <CardTitle>Pedidos por Hora (Hoje)</CardTitle>
+            <CardTitle className="text-white">Pedidos por Hora (Hoje)</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={hourlyData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="hour" />
-                  <YAxis />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                  <XAxis dataKey="hour" stroke="#666" />
+                  <YAxis stroke="#666" />
                   <Tooltip 
                     formatter={(value: number, name: string) => [
                       name === 'orders' ? value : `R$ ${value.toFixed(2)}`,
                       name === 'orders' ? 'Pedidos' : 'Faturamento'
                     ]}
-                    labelStyle={{ color: '#000' }}
+                    contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333', borderRadius: '8px' }}
+                    labelStyle={{ color: '#fff' }}
                   />
                   <Bar dataKey="orders" fill="#fb923c" radius={[4, 4, 0, 0]} />
                 </BarChart>
@@ -355,9 +364,9 @@ export const AdminRevenue = () => {
         </Card>
 
         {/* Top products */}
-        <Card>
+        <Card className="bg-black/40 border-zinc-800">
           <CardHeader>
-            <CardTitle>Produtos Mais Vendidos</CardTitle>
+            <CardTitle className="text-white">Produtos Mais Vendidos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[300px]">
@@ -383,13 +392,15 @@ export const AdminRevenue = () => {
                         `R$ ${value.toFixed(2)} (${entry.payload.quantity} un)`,
                         entry.payload.name
                       ]}
+                      contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333', borderRadius: '8px' }}
                     />
-                    <Legend />
+                    <Legend wrapperStyle={{ color: '#999' }} />
                   </PieChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="flex items-center justify-center h-full text-muted-foreground">
-                  Sem dados de produtos
+                <div className="flex items-center justify-center h-full text-zinc-500">
+                  <Pizza className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                  <p>Sem dados de produtos</p>
                 </div>
               )}
             </div>

@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Search, Eye, Loader2, Star } from 'lucide-react';
+import { Search, Eye, Loader2, Star, Users } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface Profile {
@@ -110,165 +110,174 @@ export const AdminCustomers = () => {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Gestão de Clientes</CardTitle>
-        <div className="relative mt-4">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar por nome, telefone ou ID..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-      </CardHeader>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+          <Users className="h-6 w-6 text-orange-400" />
+          Gestão de Clientes
+        </h2>
+        <p className="text-zinc-400 text-sm mt-1">Visualize e gerencie todos os clientes cadastrados</p>
+      </div>
       
-      <CardContent>
-        <ScrollArea className="h-[600px]">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Cliente</TableHead>
-                <TableHead>Telefone</TableHead>
-                <TableHead>Pontos</TableHead>
-                <TableHead>Cadastro</TableHead>
-                <TableHead>Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredProfiles.map((profile) => (
-                <TableRow key={profile.id}>
-                  <TableCell>
-                    <div>
-                      <p className="font-medium">{profile.name || 'Sem nome'}</p>
-                      <p className="text-xs text-muted-foreground font-mono">
-                        {profile.user_id.slice(0, 8)}...
-                      </p>
-                    </div>
-                  </TableCell>
-                  <TableCell>{profile.phone || '-'}</TableCell>
-                  <TableCell>
-                    <Badge variant="secondary" className="flex items-center gap-1 w-fit">
-                      <Star className="h-3 w-3 text-yellow-500" />
-                      {profile.loyalty_points}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {format(new Date(profile.created_at), 'dd/MM/yyyy', { locale: ptBR })}
-                  </TableCell>
-                  <TableCell>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleViewCustomer(profile)}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="max-w-2xl">
-                        <DialogHeader>
-                          <DialogTitle>Detalhes do Cliente</DialogTitle>
-                        </DialogHeader>
-                        {selectedCustomer && (
-                          <div className="space-y-6">
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <p className="text-sm text-muted-foreground">Nome</p>
-                                <p className="font-medium">{selectedCustomer.name || 'Sem nome'}</p>
-                              </div>
-                              <div>
-                                <p className="text-sm text-muted-foreground">Telefone</p>
-                                <p className="font-medium">{selectedCustomer.phone || 'Não informado'}</p>
-                              </div>
-                              <div>
-                                <p className="text-sm text-muted-foreground">Pontos de Fidelidade</p>
-                                <p className="font-medium flex items-center gap-1">
-                                  <Star className="h-4 w-4 text-yellow-500" />
-                                  {selectedCustomer.loyalty_points} pontos
-                                </p>
-                              </div>
-                              <div>
-                                <p className="text-sm text-muted-foreground">Cliente desde</p>
-                                <p className="font-medium">
-                                  {format(new Date(selectedCustomer.created_at), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
-                                </p>
-                              </div>
-                            </div>
-                            
-                            <div>
-                              <h4 className="font-semibold mb-3">Histórico de Pedidos</h4>
-                              {loadingOrders ? (
-                                <div className="flex items-center justify-center py-8">
-                                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                                </div>
-                              ) : customerOrders.length > 0 ? (
-                                <ScrollArea className="h-[200px]">
-                                  <Table>
-                                    <TableHeader>
-                                      <TableRow>
-                                        <TableHead>Data</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead>Total</TableHead>
-                                      </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                      {customerOrders.map((order) => (
-                                        <TableRow key={order.id}>
-                                          <TableCell>
-                                            {format(new Date(order.created_at), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
-                                          </TableCell>
-                                          <TableCell>
-                                            <Badge variant="secondary">
-                                              {statusLabels[order.status] || order.status}
-                                            </Badge>
-                                          </TableCell>
-                                          <TableCell className="font-semibold">
-                                            R$ {Number(order.total).toFixed(2)}
-                                          </TableCell>
-                                        </TableRow>
-                                      ))}
-                                    </TableBody>
-                                  </Table>
-                                </ScrollArea>
-                              ) : (
-                                <p className="text-muted-foreground text-center py-4">
-                                  Nenhum pedido encontrado
-                                </p>
-                              )}
-                            </div>
-                            
-                            <div className="border-t pt-4">
-                              <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Total de pedidos</span>
-                                <span className="font-semibold">{customerOrders.length}</span>
-                              </div>
-                              <div className="flex justify-between items-center mt-2">
-                                <span className="text-muted-foreground">Total gasto</span>
-                                <span className="font-semibold text-lg">
-                                  R$ {customerOrders.reduce((sum, o) => sum + Number(o.total), 0).toFixed(2)}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </DialogContent>
-                    </Dialog>
-                  </TableCell>
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-zinc-500" />
+        <Input
+          placeholder="Buscar por nome, telefone ou ID..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="pl-10 bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-orange-500"
+        />
+      </div>
+      
+      <Card className="bg-black/40 border-zinc-800">
+        <CardContent className="p-0">
+          <ScrollArea className="h-[600px]">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-zinc-800 hover:bg-transparent">
+                  <TableHead className="text-zinc-400">Cliente</TableHead>
+                  <TableHead className="text-zinc-400">Telefone</TableHead>
+                  <TableHead className="text-zinc-400">Pontos</TableHead>
+                  <TableHead className="text-zinc-400">Cadastro</TableHead>
+                  <TableHead className="text-zinc-400">Ações</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          
-          {filteredProfiles.length === 0 && (
-            <div className="text-center py-12 text-muted-foreground">
-              Nenhum cliente encontrado
-            </div>
-          )}
-        </ScrollArea>
-      </CardContent>
-    </Card>
+              </TableHeader>
+              <TableBody>
+                {filteredProfiles.map((profile) => (
+                  <TableRow key={profile.id} className="border-zinc-800 hover:bg-white/5">
+                    <TableCell>
+                      <div>
+                        <p className="font-medium text-white">{profile.name || 'Sem nome'}</p>
+                        <p className="text-xs text-zinc-500 font-mono">
+                          {profile.user_id.slice(0, 8)}...
+                        </p>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-zinc-300">{profile.phone || '-'}</TableCell>
+                    <TableCell>
+                      <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30 flex items-center gap-1 w-fit">
+                        <Star className="h-3 w-3" />
+                        {profile.loyalty_points}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-zinc-300">
+                      {format(new Date(profile.created_at), 'dd/MM/yyyy', { locale: ptBR })}
+                    </TableCell>
+                    <TableCell>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleViewCustomer(profile)}
+                            className="border-zinc-700 bg-zinc-800/50 text-zinc-300 hover:bg-zinc-700 hover:text-white"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl bg-zinc-900 border-zinc-700">
+                          <DialogHeader>
+                            <DialogTitle className="text-white">Detalhes do Cliente</DialogTitle>
+                          </DialogHeader>
+                          {selectedCustomer && (
+                            <div className="space-y-6">
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <p className="text-sm text-zinc-400">Nome</p>
+                                  <p className="font-medium text-white">{selectedCustomer.name || 'Sem nome'}</p>
+                                </div>
+                                <div>
+                                  <p className="text-sm text-zinc-400">Telefone</p>
+                                  <p className="font-medium text-white">{selectedCustomer.phone || 'Não informado'}</p>
+                                </div>
+                                <div>
+                                  <p className="text-sm text-zinc-400">Pontos de Fidelidade</p>
+                                  <p className="font-medium flex items-center gap-1 text-amber-400">
+                                    <Star className="h-4 w-4" />
+                                    {selectedCustomer.loyalty_points} pontos
+                                  </p>
+                                </div>
+                                <div>
+                                  <p className="text-sm text-zinc-400">Cliente desde</p>
+                                  <p className="font-medium text-white">
+                                    {format(new Date(selectedCustomer.created_at), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              <div>
+                                <h4 className="font-semibold mb-3 text-white">Histórico de Pedidos</h4>
+                                {loadingOrders ? (
+                                  <div className="flex items-center justify-center py-8">
+                                    <Loader2 className="h-6 w-6 animate-spin text-orange-400" />
+                                  </div>
+                                ) : customerOrders.length > 0 ? (
+                                  <ScrollArea className="h-[200px]">
+                                    <Table>
+                                      <TableHeader>
+                                        <TableRow className="border-zinc-700 hover:bg-transparent">
+                                          <TableHead className="text-zinc-400">Data</TableHead>
+                                          <TableHead className="text-zinc-400">Status</TableHead>
+                                          <TableHead className="text-zinc-400">Total</TableHead>
+                                        </TableRow>
+                                      </TableHeader>
+                                      <TableBody>
+                                        {customerOrders.map((order) => (
+                                          <TableRow key={order.id} className="border-zinc-700 hover:bg-white/5">
+                                            <TableCell className="text-zinc-300">
+                                              {format(new Date(order.created_at), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
+                                            </TableCell>
+                                            <TableCell>
+                                              <Badge className="bg-orange-500/20 text-orange-300 border-orange-500/30">
+                                                {statusLabels[order.status] || order.status}
+                                              </Badge>
+                                            </TableCell>
+                                            <TableCell className="font-semibold text-emerald-400">
+                                              R$ {Number(order.total).toFixed(2)}
+                                            </TableCell>
+                                          </TableRow>
+                                        ))}
+                                      </TableBody>
+                                    </Table>
+                                  </ScrollArea>
+                                ) : (
+                                  <p className="text-zinc-500 text-center py-4">
+                                    Nenhum pedido encontrado
+                                  </p>
+                                )}
+                              </div>
+                              
+                              <div className="border-t border-zinc-700 pt-4">
+                                <div className="flex justify-between items-center">
+                                  <span className="text-zinc-400">Total de pedidos</span>
+                                  <span className="font-semibold text-white">{customerOrders.length}</span>
+                                </div>
+                                <div className="flex justify-between items-center mt-2">
+                                  <span className="text-zinc-400">Total gasto</span>
+                                  <span className="font-semibold text-lg text-emerald-400">
+                                    R$ {customerOrders.reduce((sum, o) => sum + Number(o.total), 0).toFixed(2)}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            
+            {filteredProfiles.length === 0 && (
+              <div className="text-center py-12 text-zinc-500">
+                <Users className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                <p>Nenhum cliente encontrado</p>
+              </div>
+            )}
+          </ScrollArea>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
