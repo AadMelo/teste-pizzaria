@@ -87,7 +87,7 @@ export default function Banner({ onCategorySelect }: BannerProps) {
     
     const timer = setInterval(() => {
       paginate(1);
-    }, 5000);
+    }, 3000);
     return () => clearInterval(timer);
   }, [isHovered, paginate]);
 
@@ -105,24 +105,21 @@ export default function Banner({ onCategorySelect }: BannerProps) {
     enter: (direction: number) => ({
       x: direction > 0 ? '100%' : '-100%',
       opacity: 0,
-      scale: 1.1,
     }),
     center: {
       x: 0,
       opacity: 1,
-      scale: 1,
       transition: {
-        duration: 0.6,
-        ease: [0.32, 0.72, 0, 1] as const,
+        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
+        opacity: { duration: 0.4 },
       },
     },
     exit: (direction: number) => ({
       x: direction < 0 ? '100%' : '-100%',
       opacity: 0,
-      scale: 0.95,
       transition: {
-        duration: 0.5,
-        ease: [0.32, 0.72, 0, 1] as const,
+        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
+        opacity: { duration: 0.3 },
       },
     }),
   };
@@ -268,7 +265,7 @@ export default function Banner({ onCategorySelect }: BannerProps) {
                   className="absolute inset-0 bg-white"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
-                  transition={{ duration: 5, ease: 'linear' }}
+                  transition={{ duration: 3, ease: 'linear' }}
                   style={{ transformOrigin: 'left' }}
                 />
               )}
