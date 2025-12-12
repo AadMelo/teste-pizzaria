@@ -149,7 +149,7 @@ export default function Banner({ onCategorySelect }: BannerProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Main Banner Container */}
-      <div className="relative h-[200px] md:h-[400px] lg:h-[450px]">
+      <div className="relative h-[280px] sm:h-[320px] md:h-[400px] lg:h-[450px]">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={current}
