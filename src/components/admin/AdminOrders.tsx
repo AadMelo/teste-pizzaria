@@ -8,13 +8,15 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { format } from 'date-fns';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { format, startOfDay, endOfDay, isWithinInterval } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { 
   Eye, Search, RefreshCw, Loader2, ShoppingBag, 
   Clock, CreditCard, CheckCircle2, ChefHat, Truck, 
   Package, XCircle, ArrowRight, MapPin, User, Phone,
-  Wallet, Timer, AlertCircle
+  Wallet, Timer, AlertCircle, CalendarIcon, X
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -79,6 +81,8 @@ export const AdminOrders = () => {
   const [statusFilter, setStatusFilter] = useState<string>('active');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
+  const [dateFrom, setDateFrom] = useState<Date | undefined>(undefined);
+  const [dateTo, setDateTo] = useState<Date | undefined>(undefined);
 
   useEffect(() => {
     fetchOrders();
@@ -208,6 +212,23 @@ export const AdminOrders = () => {
     const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.address.toLowerCase().includes(searchTerm.toLowerCase());
     
+    // Date filter
+    const orderDate = new Date(order.created_at);
+    let matchesDate = true;
+    
+    if (dateFrom && dateTo) {
+      matchesDate = isWithinInterval(orderDate, {
+        start: startOfDay(dateFrom),
+        end: endOfDay(dateTo)
+      });
+    } else if (dateFrom) {
+      matchesDate = orderDate >= startOfDay(dateFrom);
+    } else if (dateTo) {
+      matchesDate = orderDate <= endOfDay(dateTo);
+    }
+    
+    if (!matchesDate) return false;
+    
     if (statusFilter === 'all') return matchesSearch;
     if (statusFilter === 'active') {
       return matchesSearch && !['delivered', 'cancelled'].includes(order.status);
@@ -298,15 +319,84 @@ export const AdminOrders = () => {
         })}
       </div>
       
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-zinc-500" />
-        <Input
-          placeholder="Buscar por ID do pedido ou endereço..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-orange-500"
-        />
+      {/* Search and Date Filters */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-zinc-500" />
+          <Input
+            placeholder="Buscar por ID do pedido ou endereço..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-orange-500"
+          />
+        </div>
+        
+        {/* Date From */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn(
+                "w-full sm:w-[150px] justify-start text-left font-normal border-zinc-700 bg-black/40 text-zinc-300 hover:bg-zinc-800",
+                dateFrom && "text-white"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {dateFrom ? format(dateFrom, "dd/MM/yy") : "De"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0 bg-zinc-900 border-zinc-700" align="start">
+            <Calendar
+              mode="single"
+              selected={dateFrom}
+              onSelect={setDateFrom}
+              initialFocus
+              locale={ptBR}
+              className="p-3 pointer-events-auto"
+            />
+          </PopoverContent>
+        </Popover>
+        
+        {/* Date To */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn(
+                "w-full sm:w-[150px] justify-start text-left font-normal border-zinc-700 bg-black/40 text-zinc-300 hover:bg-zinc-800",
+                dateTo && "text-white"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {dateTo ? format(dateTo, "dd/MM/yy") : "Até"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0 bg-zinc-900 border-zinc-700" align="start">
+            <Calendar
+              mode="single"
+              selected={dateTo}
+              onSelect={setDateTo}
+              initialFocus
+              locale={ptBR}
+              className="p-3 pointer-events-auto"
+            />
+          </PopoverContent>
+        </Popover>
+        
+        {/* Clear Date Filter */}
+        {(dateFrom || dateTo) && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => {
+              setDateFrom(undefined);
+              setDateTo(undefined);
+            }}
+            className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        )}
       </div>
 
       {/* Orders Grid */}
