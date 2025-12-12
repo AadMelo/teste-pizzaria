@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { Minus, Plus, Trash2, ShoppingBag, Tag, X, Loader2 } from 'lucide-react';
+import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { useCart, CartPizza, CartProduct } from '@/contexts/CartContext';
-import { useCoupon } from '@/hooks/useCoupon';
 import Checkout from './Checkout';
 
 export default function Cart() {
@@ -13,37 +11,12 @@ export default function Cart() {
     items,
     removeFromCart,
     updateQuantity,
-    appliedCoupon,
-    setAppliedCoupon,
-    discount,
     subtotal,
     deliveryFee,
     total,
   } = useCart();
   
-  const [couponInput, setCouponInput] = useState('');
   const [showCheckout, setShowCheckout] = useState(false);
-  const { isValidating, validateCoupon } = useCoupon();
-
-  const handleApplyCoupon = async () => {
-    if (!couponInput.trim()) return;
-    
-    const result = await validateCoupon(couponInput, subtotal);
-    
-    if (result?.valid) {
-      setAppliedCoupon({
-        code: couponInput.trim().toUpperCase(),
-        couponId: result.coupon_id!,
-        discountAmount: result.discount_amount,
-        description: result.message
-      });
-    }
-    setCouponInput('');
-  };
-
-  const handleRemoveCoupon = () => {
-    setAppliedCoupon(null);
-  };
 
   if (showCheckout) {
     return <Checkout onBack={() => setShowCheckout(false)} />;
@@ -205,65 +178,6 @@ export default function Cart() {
             {items.map((item) => renderCartItem(item))}
           </div>
 
-          {/* Coupon Section */}
-          <div className="py-4 space-y-3">
-            {appliedCoupon ? (
-              <div className="flex items-center justify-between bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-3">
-                <div className="flex items-center gap-2">
-                  <Tag className="h-4 w-4 text-green-600" />
-                  <div>
-                    <p className="text-sm font-medium text-green-700 dark:text-green-400">
-                      {appliedCoupon.code}
-                    </p>
-                    <p className="text-xs text-green-600 dark:text-green-500">
-                      {appliedCoupon.description}
-                    </p>
-                  </div>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-100 dark:hover:bg-green-900"
-                  onClick={handleRemoveCoupon}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            ) : (
-              <div className="flex gap-2">
-                <div className="relative flex-1">
-                  <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Código do cupom"
-                    value={couponInput}
-                    onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
-                    onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
-                    className="pl-10 uppercase"
-                    maxLength={20}
-                  />
-                </div>
-                <Button 
-                  variant="outline" 
-                  onClick={handleApplyCoupon}
-                  disabled={isValidating || !couponInput.trim()}
-                >
-                  {isValidating ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    'Aplicar'
-                  )}
-                </Button>
-              </div>
-            )}
-            
-            {/* Available coupons hint */}
-            {!appliedCoupon && (
-              <p className="text-xs text-muted-foreground">
-                💡 Experimente: PROMO10, BEMVINDO15, FRETE0
-              </p>
-            )}
-          </div>
-
           <Separator />
 
           {/* Summary */}
@@ -272,12 +186,6 @@ export default function Cart() {
               <span className="text-muted-foreground">Subtotal</span>
               <span>R$ {subtotal.toFixed(2).replace('.', ',')}</span>
             </div>
-            {discount > 0 && (
-              <div className="flex justify-between text-sm text-green-600">
-                <span>Desconto ({appliedCoupon?.code})</span>
-                <span>-R$ {discount.toFixed(2).replace('.', ',')}</span>
-              </div>
-            )}
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Taxa de entrega</span>
               <span>R$ {deliveryFee.toFixed(2).replace('.', ',')}</span>

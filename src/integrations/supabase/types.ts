@@ -14,90 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      coupon_uses: {
-        Row: {
-          coupon_id: string
-          id: string
-          order_id: string | null
-          used_at: string
-          user_id: string
-        }
-        Insert: {
-          coupon_id: string
-          id?: string
-          order_id?: string | null
-          used_at?: string
-          user_id: string
-        }
-        Update: {
-          coupon_id?: string
-          id?: string
-          order_id?: string | null
-          used_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "coupon_uses_coupon_id_fkey"
-            columns: ["coupon_id"]
-            isOneToOne: false
-            referencedRelation: "coupons"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "coupon_uses_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      coupons: {
-        Row: {
-          code: string
-          created_at: string
-          current_uses: number | null
-          description: string | null
-          discount_type: string
-          discount_value: number
-          id: string
-          is_active: boolean | null
-          max_uses: number | null
-          min_order_value: number | null
-          valid_from: string | null
-          valid_until: string | null
-        }
-        Insert: {
-          code: string
-          created_at?: string
-          current_uses?: number | null
-          description?: string | null
-          discount_type: string
-          discount_value: number
-          id?: string
-          is_active?: boolean | null
-          max_uses?: number | null
-          min_order_value?: number | null
-          valid_from?: string | null
-          valid_until?: string | null
-        }
-        Update: {
-          code?: string
-          created_at?: string
-          current_uses?: number | null
-          description?: string | null
-          discount_type?: string
-          discount_value?: number
-          id?: string
-          is_active?: boolean | null
-          max_uses?: number | null
-          min_order_value?: number | null
-          valid_from?: string | null
-          valid_until?: string | null
-        }
-        Relationships: []
-      }
       loyalty_transactions: {
         Row: {
           created_at: string
@@ -229,19 +145,6 @@ export type Database = {
       redeem_loyalty_points: {
         Args: { p_description: string; p_points: number; p_user_id: string }
         Returns: number
-      }
-      use_coupon: {
-        Args: { p_coupon_id: string; p_order_id?: string; p_user_id: string }
-        Returns: boolean
-      }
-      validate_coupon: {
-        Args: { p_code: string; p_order_total: number; p_user_id: string }
-        Returns: {
-          coupon_id: string
-          discount_amount: number
-          message: string
-          valid: boolean
-        }[]
       }
     }
     Enums: {

@@ -24,7 +24,7 @@ type PaymentMethod = 'pix' | 'card' | 'cash';
 const POINTS_TO_CURRENCY_RATE = 0.1;
 
 export default function Checkout({ onBack }: CheckoutProps) {
-  const { items, total, subtotal, discount: couponDiscount, deliveryFee, clearCart } = useCart();
+  const { items, total, subtotal, deliveryFee, clearCart } = useCart();
   const { user } = useAuth();
   const { points, addPoints, redeemPoints } = useLoyalty();
   
@@ -189,7 +189,7 @@ export default function Checkout({ onBack }: CheckoutProps) {
             user_id: user.id,
             items: orderItems,
             subtotal,
-            discount: couponDiscount + pointsDiscount,
+            discount: pointsDiscount,
             delivery_fee: deliveryFee,
             total: finalTotal,
             address: fullAddress,
@@ -475,12 +475,6 @@ export default function Checkout({ onBack }: CheckoutProps) {
             <span>Subtotal</span>
             <span>R$ {subtotal.toFixed(2).replace('.', ',')}</span>
           </div>
-          {couponDiscount > 0 && (
-            <div className="flex justify-between text-sm text-green-600">
-              <span>Desconto cupom</span>
-              <span>-R$ {couponDiscount.toFixed(2).replace('.', ',')}</span>
-            </div>
-          )}
           {pointsDiscount > 0 && (
             <div className="flex justify-between text-sm text-green-600">
               <span>Desconto pontos ({pointsToRedeem} pts)</span>
