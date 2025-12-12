@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Plus, Pencil, Trash2, Search, Loader2, Pizza, Upload, X, ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import adminMenuHero from '@/assets/admin-menu-hero.jpg';
 
 interface Product {
   id: string;
@@ -296,14 +297,26 @@ export const AdminProducts = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Pizza className="h-6 w-6 text-orange-400" />
-            Gestão do Cardápio
-          </h2>
-          <p className="text-zinc-400 text-sm mt-1">Adicione, edite ou remova produtos do menu</p>
+      {/* Hero Banner */}
+      <div className="relative rounded-xl overflow-hidden h-28 md:h-36 group">
+        <img 
+          src={adminMenuHero} 
+          alt="Cardápio" 
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+        <div className="absolute inset-0 flex items-center px-5">
+          <div>
+            <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
+              <Pizza className="h-5 w-5 md:h-6 md:w-6 text-orange-400" />
+              Gestão do Cardápio
+            </h2>
+            <p className="text-orange-200/80 text-sm mt-1">Adicione, edite ou remova produtos do menu</p>
+          </div>
         </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button 
