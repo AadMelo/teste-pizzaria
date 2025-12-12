@@ -99,7 +99,7 @@ export default function Banner({ onCategorySelect }: BannerProps) {
             x: {
               repeat: Infinity,
               repeatType: 'loop',
-              duration: 12,
+              duration: 2,
               ease: 'linear',
             },
           }}
