@@ -82,25 +82,15 @@ export function useCoupon() {
     if (!appliedCoupon || !user?.id) return;
 
     try {
-      // Record coupon usage
-      await supabase.from('coupon_uses').insert({
-        coupon_id: appliedCoupon.couponId,
-        user_id: user.id,
-        order_id: orderId
+      // Use the secure function to record coupon usage and increment count
+      const { error } = await supabase.rpc('use_coupon', {
+        p_coupon_id: appliedCoupon.couponId,
+        p_user_id: user.id,
+        p_order_id: orderId
       });
 
-      // Increment coupon usage count directly
-      const { data: coupon } = await supabase
-        .from('coupons')
-        .select('current_uses')
-        .eq('id', appliedCoupon.couponId)
-        .maybeSingle();
-
-      if (coupon) {
-        await supabase
-          .from('coupons')
-          .update({ current_uses: (coupon.current_uses || 0) + 1 })
-          .eq('id', appliedCoupon.couponId);
+      if (error) {
+        console.error('Error recording coupon usage:', error);
       }
     } catch (err) {
       console.error('Error recording coupon usage:', err);
