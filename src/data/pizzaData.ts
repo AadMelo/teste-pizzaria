@@ -54,7 +54,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Molho de tomate', 'Mussarela', 'Manjericão fresco', 'Azeite'],
     category: 'tradicional',
     basePrice: 35.90,
-    image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&q=100&fit=crop'
   },
   {
     id: '2',
@@ -63,7 +63,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Molho de tomate', 'Mussarela', 'Calabresa', 'Cebola', 'Azeitonas'],
     category: 'tradicional',
     basePrice: 38.90,
-    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=100&fit=crop'
   },
   {
     id: '3',
@@ -72,7 +72,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Molho de tomate', 'Mussarela', 'Presunto', 'Ovos', 'Cebola', 'Azeitonas', 'Ervilha'],
     category: 'tradicional',
     basePrice: 42.90,
-    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=100&fit=crop'
   },
   {
     id: '4',
@@ -81,7 +81,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Molho de tomate', 'Mussarela', 'Provolone', 'Parmesão', 'Gorgonzola'],
     category: 'especial',
     basePrice: 48.90,
-    image: 'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=800&q=100&fit=crop'
   },
   {
     id: '5',
@@ -90,7 +90,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Molho de tomate', 'Mussarela', 'Frango desfiado', 'Catupiry'],
     category: 'especial',
     basePrice: 45.90,
-    image: 'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=800&q=100&fit=crop'
   },
   {
     id: '6',
@@ -99,7 +99,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Molho de tomate', 'Mussarela', 'Pepperoni'],
     category: 'tradicional',
     basePrice: 44.90,
-    image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=800&q=100&fit=crop'
   },
   {
     id: '7',
@@ -108,7 +108,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Molho de tomate', 'Mussarela', 'Bacon', 'Cebola caramelizada'],
     category: 'especial',
     basePrice: 49.90,
-    image: 'https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=800&q=100&fit=crop'
   },
   {
     id: '8',
@@ -117,7 +117,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Molho de tomate', 'Mussarela', 'Pimentão', 'Champignon', 'Tomate', 'Milho', 'Brócolis'],
     category: 'especial',
     basePrice: 43.90,
-    image: 'https://images.unsplash.com/photo-1511689660979-10d2b1aada49?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1511689660979-10d2b1aada49?w=800&q=100&fit=crop'
   },
   {
     id: '9',
@@ -126,7 +126,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Molho de tomate', 'Mussarela de búfala', 'Tomate fresco', 'Manjericão'],
     category: 'premium',
     basePrice: 55.90,
-    image: 'https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?w=800&q=100&fit=crop'
   },
   {
     id: '10',
@@ -144,7 +144,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Molho de tomate', 'Mussarela', 'Carne seca', 'Catupiry', 'Cebola'],
     category: 'premium',
     basePrice: 58.90,
-    image: 'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=800&q=100&fit=crop'
   },
   {
     id: '12',
@@ -153,7 +153,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Molho de tomate', 'Mussarela', 'Lombo canadense', 'Catupiry', 'Abacaxi'],
     category: 'especial',
     basePrice: 52.90,
-    image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&q=100&fit=crop'
   },
   {
     id: '13',
@@ -162,7 +162,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Chocolate ao leite', 'Granulado'],
     category: 'doce',
     basePrice: 38.90,
-    image: 'https://images.unsplash.com/photo-1481391319762-47dff72954d9?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1481391319762-47dff72954d9?w=800&q=100&fit=crop'
   },
   {
     id: '14',
@@ -171,7 +171,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Goiabada', 'Queijo minas'],
     category: 'doce',
     basePrice: 40.90,
-    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=100&fit=crop'
   },
   {
     id: '15',
@@ -180,7 +180,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Banana', 'Açúcar', 'Canela', 'Leite condensado'],
     category: 'doce',
     basePrice: 36.90,
-    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=100&fit=crop'
   },
   {
     id: '16',
@@ -189,7 +189,7 @@ export const pizzas: Pizza[] = [
     ingredients: ['Chocolate', 'Coco ralado', 'Leite condensado'],
     category: 'doce',
     basePrice: 42.90,
-    image: 'https://images.unsplash.com/photo-1481391319762-47dff72954d9?w=400&q=80'
+    image: 'https://images.unsplash.com/photo-1481391319762-47dff72954d9?w=800&q=100&fit=crop'
   }
 ];
 
