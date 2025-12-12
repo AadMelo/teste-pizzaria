@@ -24,11 +24,11 @@ export default function FeaturedPizzas({ pizzas, onSelect }: FeaturedPizzasProps
             className="relative cursor-pointer active:scale-[0.98] transition-transform sm:min-w-[140px] sm:flex-shrink-0 scroll-item"
             onClick={() => onSelect(pizza)}
           >
-            <div className="relative overflow-hidden rounded-xl aspect-square">
+            <div className="relative overflow-hidden rounded-xl aspect-[4/3]">
               <img
                 src={pizza.image}
                 alt={pizza.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-center"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
