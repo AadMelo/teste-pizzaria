@@ -219,7 +219,7 @@ export default function Banner({ onCategorySelect }: BannerProps) {
                 transition={{ delay: 0.5 }}
               >
                 <Button 
-                  className="group w-fit bg-white hover:bg-white/90 text-foreground font-semibold px-5 md:px-8 py-2.5 md:py-3 text-sm md:text-base rounded-full shadow-xl transition-all duration-300 h-10 md:h-12"
+                  className="group w-fit bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-5 md:px-8 py-2.5 md:py-3 text-sm md:text-base rounded-full shadow-xl transition-all duration-300 h-10 md:h-12"
                   onClick={() => handleOrderClick(banner.action)}
                 >
                   Ver Cardápio
