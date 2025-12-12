@@ -24,6 +24,13 @@ export interface CartProduct {
 
 export type CartItem = CartPizza | CartProduct;
 
+export interface AppliedCoupon {
+  code: string;
+  couponId: string;
+  discountAmount: number;
+  description: string;
+}
+
 interface CartContextType {
   items: CartItem[];
   addToCart: (item: CartItem) => void;
@@ -31,8 +38,8 @@ interface CartContextType {
   removeFromCart: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
-  coupon: string | null;
-  setCoupon: (coupon: string | null) => void;
+  appliedCoupon: AppliedCoupon | null;
+  setAppliedCoupon: (coupon: AppliedCoupon | null) => void;
   discount: number;
   subtotal: number;
   deliveryFee: number;
@@ -44,7 +51,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [coupon, setCoupon] = useState<string | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<AppliedCoupon | null>(null);
   const deliveryFee = 5.90;
 
   const addToCart = (item: CartItem) => {
@@ -89,14 +96,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = () => {
     setItems([]);
-    setCoupon(null);
+    setAppliedCoupon(null);
   };
 
   const subtotal = items.reduce((acc, item) => {
     return acc + item.totalPrice * item.quantity;
   }, 0);
 
-  const discount = coupon === 'PROMO10' ? subtotal * 0.1 : 0;
+  const discount = appliedCoupon?.discountAmount || 0;
 
   const total = subtotal - discount + (items.length > 0 ? deliveryFee : 0);
 
@@ -111,8 +118,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         removeFromCart,
         updateQuantity,
         clearCart,
-        coupon,
-        setCoupon,
+        appliedCoupon,
+        setAppliedCoupon,
         discount,
         subtotal,
         deliveryFee,
