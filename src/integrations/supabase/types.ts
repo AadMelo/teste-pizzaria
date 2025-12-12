@@ -230,6 +230,10 @@ export type Database = {
         Args: { p_description: string; p_points: number; p_user_id: string }
         Returns: number
       }
+      use_coupon: {
+        Args: { p_coupon_id: string; p_order_id?: string; p_user_id: string }
+        Returns: boolean
+      }
       validate_coupon: {
         Args: { p_code: string; p_order_total: number; p_user_id: string }
         Returns: {
