@@ -21,6 +21,7 @@ import {
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { OrderProgressBar } from '@/components/OrderProgressBar';
+import adminOrdersHero from '@/assets/admin-orders-hero.jpg';
 
 interface Order {
   id: string;
@@ -254,17 +255,27 @@ export const AdminOrders = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-            <ShoppingBag className="h-6 w-6 text-orange-400" />
-            Central de Pedidos
-          </h2>
-          <p className="text-zinc-400 text-sm mt-1">
-            {activeOrdersCount} pedidos ativos em tempo real
-          </p>
+      {/* Hero Banner */}
+      <div className="relative rounded-xl overflow-hidden h-28 md:h-36 group">
+        <img 
+          src={adminOrdersHero} 
+          alt="Pedidos" 
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+        <div className="absolute inset-0 flex items-center px-5">
+          <div>
+            <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
+              <ShoppingBag className="h-5 w-5 md:h-6 md:w-6 text-orange-400" />
+              Central de Pedidos
+            </h2>
+            <p className="text-orange-200/80 text-sm mt-1">{activeOrdersCount} pedidos ativos em tempo real</p>
+          </div>
         </div>
+      </div>
+
+      {/* Header */}
+      <div className="flex justify-end">
         <Button 
           variant="outline" 
           size="sm" 

@@ -11,6 +11,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Search, Eye, Loader2, Star, Users } from 'lucide-react';
 import { toast } from 'sonner';
+import adminCustomersHero from '@/assets/admin-customers-hero.jpg';
 
 interface Profile {
   id: string;
@@ -111,12 +112,23 @@ export const AdminCustomers = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-          <Users className="h-6 w-6 text-orange-400" />
-          Gestão de Clientes
-        </h2>
-        <p className="text-zinc-400 text-sm mt-1">Visualize e gerencie todos os clientes cadastrados</p>
+      {/* Hero Banner */}
+      <div className="relative rounded-xl overflow-hidden h-28 md:h-36 group">
+        <img 
+          src={adminCustomersHero} 
+          alt="Clientes" 
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+        <div className="absolute inset-0 flex items-center px-5">
+          <div>
+            <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
+              <Users className="h-5 w-5 md:h-6 md:w-6 text-rose-400" />
+              Gestão de Clientes
+            </h2>
+            <p className="text-rose-200/80 text-sm mt-1">Visualize e gerencie todos os clientes cadastrados</p>
+          </div>
+        </div>
       </div>
       
       <div className="relative">

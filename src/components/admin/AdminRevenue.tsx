@@ -7,6 +7,7 @@ import { ptBR } from 'date-fns/locale';
 import { Loader2, TrendingUp, TrendingDown, DollarSign, ShoppingBag, Pizza } from 'lucide-react';
 import { toast } from 'sonner';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Legend } from 'recharts';
+import adminRevenueHero from '@/assets/admin-revenue-hero.jpg';
 
 interface Order {
   id: string;
@@ -190,15 +191,27 @@ export const AdminRevenue = () => {
 
   return (
     <div className="space-y-6">
+      {/* Hero Banner */}
+      <div className="relative rounded-xl overflow-hidden h-28 md:h-36 group">
+        <img 
+          src={adminRevenueHero} 
+          alt="Faturamento" 
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+        <div className="absolute inset-0 flex items-center px-5">
+          <div>
+            <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 md:h-6 md:w-6 text-emerald-400" />
+              Dashboard de Faturamento
+            </h2>
+            <p className="text-emerald-200/80 text-sm mt-1">Acompanhe as métricas de vendas em tempo real</p>
+          </div>
+        </div>
+      </div>
+
       {/* Period selector */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-            <TrendingUp className="h-6 w-6 text-orange-400" />
-            Dashboard de Faturamento
-          </h2>
-          <p className="text-zinc-400 text-sm mt-1">Acompanhe as métricas de vendas em tempo real</p>
-        </div>
         <Select value={period} onValueChange={setPeriod}>
           <SelectTrigger className="w-[180px] bg-black/40 border-zinc-700 text-white">
             <SelectValue placeholder="Selecionar período" />
