@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Pizza, Mail, Lock, User, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -14,34 +14,48 @@ export default function Auth() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingRole, setIsCheckingRole] = useState(false);
   
   const { user, signIn, signUp } = useAuth();
   const navigate = useNavigate();
 
   // Check if user is admin and redirect accordingly
-  const checkAdminAndRedirect = async (userId: string) => {
+  const checkAdminAndRedirect = useCallback(async (userId: string) => {
+    if (isCheckingRole) return;
+    setIsCheckingRole(true);
+    
+    console.log('Checking admin role for user:', userId);
+    
     try {
       const { data, error } = await supabase
         .from('user_roles' as any)
         .select('role')
         .eq('user_id', userId)
-        .single();
+        .maybeSingle();
+
+      console.log('Role check result:', { data, error });
 
       if (!error && (data as any)?.role === 'admin') {
-        navigate('/admin');
+        console.log('User is admin, redirecting to /admin');
+        toast.success('Bem-vindo ao painel administrativo!');
+        navigate('/admin', { replace: true });
       } else {
-        navigate('/');
+        console.log('User is not admin, redirecting to /');
+        navigate('/', { replace: true });
       }
-    } catch {
-      navigate('/');
+    } catch (err) {
+      console.error('Error checking role:', err);
+      navigate('/', { replace: true });
+    } finally {
+      setIsCheckingRole(false);
     }
-  };
+  }, [navigate, isCheckingRole]);
 
   useEffect(() => {
-    if (user) {
+    if (user && !isLoading) {
       checkAdminAndRedirect(user.id);
     }
-  }, [user]);
+  }, [user, isLoading, checkAdminAndRedirect]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,24 +63,31 @@ export default function Auth() {
 
     try {
       if (isLogin) {
-        const { error } = await signIn(email, password);
+        const { error, data } = await signIn(email, password);
         if (error) {
           if (error.message.includes('Invalid login credentials')) {
             toast.error('Email ou senha incorretos');
           } else {
             toast.error('Erro ao fazer login');
           }
+          setIsLoading(false);
           return;
         }
-        toast.success('Bem-vindo de volta!');
-        // Redirect will happen via useEffect when user state updates
+        
+        // If we got a user directly from signIn, check role immediately
+        if (data?.user) {
+          console.log('Login successful, checking role for:', data.user.id);
+          await checkAdminAndRedirect(data.user.id);
+        }
       } else {
         if (!name.trim()) {
           toast.error('Informe seu nome');
+          setIsLoading(false);
           return;
         }
         if (password.length < 6) {
           toast.error('A senha deve ter pelo menos 6 caracteres');
+          setIsLoading(false);
           return;
         }
         const { error } = await signUp(email, password, name);
@@ -76,10 +97,11 @@ export default function Auth() {
           } else {
             toast.error('Erro ao criar conta');
           }
+          setIsLoading(false);
           return;
         }
         toast.success('Conta criada com sucesso! Você ganhou 50 pontos de boas-vindas! 🎉');
-        navigate('/');
+        navigate('/', { replace: true });
       }
     } finally {
       setIsLoading(false);
