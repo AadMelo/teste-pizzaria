@@ -19,7 +19,8 @@ import {
   ChefHat,
   Flame,
   Settings,
-  BarChart3
+  BarChart3,
+  Image
 } from 'lucide-react';
 import { AdminOrders } from '@/components/admin/AdminOrders';
 import { AdminProducts } from '@/components/admin/AdminProducts';
@@ -27,6 +28,7 @@ import { AdminCustomers } from '@/components/admin/AdminCustomers';
 import { AdminRevenue } from '@/components/admin/AdminRevenue';
 import { AdminSettings } from '@/components/admin/AdminSettings';
 import { AdminStats } from '@/components/admin/AdminStats';
+import { AdminBanners } from '@/components/admin/AdminBanners';
 import { toast } from 'sonner';
 
 interface DashboardStats {
@@ -340,6 +342,13 @@ const AdminDashboard = () => {
               <span>Faturamento</span>
             </TabsTrigger>
             <TabsTrigger 
+              value="banners" 
+              className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-red-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-orange-500/30 px-5 py-2.5 rounded-lg transition-all"
+            >
+              <Image className="h-4 w-4" />
+              <span>Banners</span>
+            </TabsTrigger>
+            <TabsTrigger 
               value="settings" 
               className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-red-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-orange-500/30 px-5 py-2.5 rounded-lg transition-all"
             >
@@ -367,6 +376,10 @@ const AdminDashboard = () => {
 
             <TabsContent value="revenue" className="mt-0">
               <AdminRevenue />
+            </TabsContent>
+
+            <TabsContent value="banners" className="mt-0">
+              <AdminBanners />
             </TabsContent>
 
             <TabsContent value="settings" className="mt-0">
