@@ -21,8 +21,12 @@ interface Product {
   description: string | null;
   price: number;
   category: string;
+  product_type: string;
   image_url: string | null;
+  ingredients: string[] | null;
+  size: string | null;
   is_available: boolean;
+  display_order: number;
   created_at: string;
 }
 
@@ -31,17 +35,21 @@ const productSchema = z.object({
   description: z.string().max(500).optional(),
   price: z.number().min(0.01, 'Preço deve ser maior que zero'),
   category: z.string().min(1, 'Categoria é obrigatória'),
+  product_type: z.string().min(1, 'Tipo é obrigatório'),
   image_url: z.string().url().optional().or(z.literal('')),
+  ingredients: z.string().optional(),
+  size: z.string().optional(),
   is_available: z.boolean()
 });
 
 const categories = [
   'Pizzas Tradicionais',
+  'Pizzas Especiais',
   'Pizzas Premium',
   'Pizzas Doces',
   'Bebidas',
   'Sobremesas',
-  'Combos'
+  'Porções'
 ];
 
 export const AdminProducts = () => {
@@ -56,7 +64,10 @@ export const AdminProducts = () => {
     description: '',
     price: '',
     category: '',
+    product_type: 'product',
     image_url: '',
+    ingredients: '',
+    size: '',
     is_available: true
   });
   const [saving, setSaving] = useState(false);
@@ -68,9 +79,9 @@ export const AdminProducts = () => {
   const fetchProducts = async () => {
     try {
       const { data, error } = await supabase
-        .from('products' as any)
+        .from('products')
         .select('*')
-        .order('category', { ascending: true });
+        .order('display_order', { ascending: true });
 
       if (error) throw error;
       setProducts((data as unknown as Product[]) || []);
@@ -90,7 +101,10 @@ export const AdminProducts = () => {
         description: product.description || '',
         price: product.price.toString(),
         category: product.category,
+        product_type: product.product_type,
         image_url: product.image_url || '',
+        ingredients: product.ingredients?.join(', ') || '',
+        size: product.size || '',
         is_available: product.is_available
       });
     } else {
@@ -100,7 +114,10 @@ export const AdminProducts = () => {
         description: '',
         price: '',
         category: '',
+        product_type: 'product',
         image_url: '',
+        ingredients: '',
+        size: '',
         is_available: true
       });
     }
@@ -116,36 +133,41 @@ export const AdminProducts = () => {
         description: formData.description || undefined,
         price: parseFloat(formData.price),
         category: formData.category,
+        product_type: formData.product_type,
         image_url: formData.image_url || undefined,
+        ingredients: formData.ingredients || undefined,
+        size: formData.size || undefined,
         is_available: formData.is_available
       });
 
+      const ingredientsArray = validatedData.ingredients 
+        ? validatedData.ingredients.split(',').map(i => i.trim()).filter(i => i.length > 0)
+        : null;
+
+      const productData = {
+        name: validatedData.name,
+        description: validatedData.description || null,
+        price: validatedData.price,
+        category: validatedData.category,
+        product_type: validatedData.product_type,
+        image_url: validatedData.image_url || null,
+        ingredients: ingredientsArray,
+        size: validatedData.size || null,
+        is_available: validatedData.is_available
+      };
+
       if (editingProduct) {
         const { error } = await supabase
-          .from('products' as any)
-          .update({
-            name: validatedData.name,
-            description: validatedData.description || null,
-            price: validatedData.price,
-            category: validatedData.category,
-            image_url: validatedData.image_url || null,
-            is_available: validatedData.is_available
-          } as any)
+          .from('products')
+          .update(productData as any)
           .eq('id', editingProduct.id);
 
         if (error) throw error;
         toast.success('Produto atualizado com sucesso!');
       } else {
         const { error } = await supabase
-          .from('products' as any)
-          .insert({
-            name: validatedData.name,
-            description: validatedData.description || null,
-            price: validatedData.price,
-            category: validatedData.category,
-            image_url: validatedData.image_url || null,
-            is_available: validatedData.is_available
-          } as any);
+          .from('products')
+          .insert(productData as any);
 
         if (error) throw error;
         toast.success('Produto criado com sucesso!');
@@ -170,7 +192,7 @@ export const AdminProducts = () => {
 
     try {
       const { error } = await supabase
-        .from('products' as any)
+        .from('products')
         .delete()
         .eq('id', id);
 
@@ -186,7 +208,7 @@ export const AdminProducts = () => {
   const toggleAvailability = async (id: string, currentStatus: boolean) => {
     try {
       const { error } = await supabase
-        .from('products' as any)
+        .from('products')
         .update({ is_available: !currentStatus } as any)
         .eq('id', id);
 
@@ -239,17 +261,35 @@ export const AdminProducts = () => {
                 {editingProduct ? 'Editar Produto' : 'Novo Produto'}
               </DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="name" className="text-zinc-300">Nome *</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="Ex: Pizza Margherita"
-                  className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500"
-                />
+            <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="name" className="text-zinc-300">Nome *</Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="Ex: Pizza Margherita"
+                    className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="product_type" className="text-zinc-300">Tipo *</Label>
+                  <Select
+                    value={formData.product_type}
+                    onValueChange={(value) => setFormData({ ...formData, product_type: value })}
+                  >
+                    <SelectTrigger className="bg-black/40 border-zinc-700 text-white">
+                      <SelectValue placeholder="Selecione..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-zinc-900 border-zinc-700">
+                      <SelectItem value="pizza">Pizza</SelectItem>
+                      <SelectItem value="product">Produto</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
+              
               <div>
                 <Label htmlFor="description" className="text-zinc-300">Descrição</Label>
                 <Textarea
@@ -257,10 +297,11 @@ export const AdminProducts = () => {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Descrição do produto..."
-                  rows={3}
+                  rows={2}
                   className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500"
                 />
               </div>
+              
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="price" className="text-zinc-300">Preço (R$) *</Label>
@@ -292,6 +333,34 @@ export const AdminProducts = () => {
                   </Select>
                 </div>
               </div>
+              
+              {formData.product_type === 'pizza' && (
+                <div>
+                  <Label htmlFor="ingredients" className="text-zinc-300">Ingredientes (separados por vírgula)</Label>
+                  <Textarea
+                    id="ingredients"
+                    value={formData.ingredients}
+                    onChange={(e) => setFormData({ ...formData, ingredients: e.target.value })}
+                    placeholder="Molho de tomate, Mussarela, Manjericão..."
+                    rows={2}
+                    className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500"
+                  />
+                </div>
+              )}
+              
+              {formData.product_type === 'product' && (
+                <div>
+                  <Label htmlFor="size" className="text-zinc-300">Tamanho (opcional)</Label>
+                  <Input
+                    id="size"
+                    value={formData.size}
+                    onChange={(e) => setFormData({ ...formData, size: e.target.value })}
+                    placeholder="Ex: 350ml, 2L, 500g"
+                    className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500"
+                  />
+                </div>
+              )}
+              
               <div>
                 <Label htmlFor="image_url" className="text-zinc-300">URL da Imagem</Label>
                 <Input
@@ -302,6 +371,7 @@ export const AdminProducts = () => {
                   className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500"
                 />
               </div>
+              
               <div className="flex items-center justify-between p-3 bg-black/40 rounded-lg border border-zinc-700">
                 <Label htmlFor="is_available" className="text-zinc-300">Disponível para venda</Label>
                 <Switch
@@ -310,6 +380,7 @@ export const AdminProducts = () => {
                   onCheckedChange={(checked) => setFormData({ ...formData, is_available: checked })}
                 />
               </div>
+              
               <Button 
                 onClick={handleSave} 
                 className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white" 
