@@ -30,6 +30,7 @@ import { AdminSettings } from '@/components/admin/AdminSettings';
 import { AdminStats } from '@/components/admin/AdminStats';
 import { AdminBanners } from '@/components/admin/AdminBanners';
 import { toast } from 'sonner';
+import adminHeroImage from '@/assets/admin-hero-pizzeria.jpg';
 
 interface DashboardStats {
   totalOrders: number;
@@ -201,6 +202,29 @@ const AdminDashboard = () => {
       </header>
 
       <main className="relative z-10 container mx-auto px-4 py-8">
+        {/* Hero Banner */}
+        <div className="relative mb-8 rounded-2xl overflow-hidden h-40 md:h-56 group">
+          <img 
+            src={adminHeroImage} 
+            alt="Pizzaria artesanal" 
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+          <div className="absolute inset-0 flex items-center px-6 md:px-10">
+            <div>
+              <h2 className="text-2xl md:text-4xl font-bold text-white drop-shadow-lg">
+                Bem-vindo ao seu
+                <span className="block bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
+                  Painel de Gestão
+                </span>
+              </h2>
+              <p className="text-orange-200/80 mt-2 text-sm md:text-base max-w-md">
+                Gerencie pedidos, cardápio, clientes e acompanhe o desempenho da sua pizzaria em tempo real.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           {/* Pedidos Hoje */}
