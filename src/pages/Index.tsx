@@ -5,6 +5,7 @@ import Banner from '@/components/Banner';
 import StoreInfo from '@/components/StoreInfo';
 import HowItWorks from '@/components/HowItWorks';
 import SpecialOffers from '@/components/SpecialOffers';
+import FlashDeals from '@/components/FlashDeals';
 import FeaturedPizzas from '@/components/FeaturedPizzas';
 import Categories from '@/components/Categories';
 import PizzaCard from '@/components/PizzaCard';
@@ -141,6 +142,15 @@ export default function Index() {
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           <SpecialOffers />
+        </motion.div>
+        
+        {/* Flash Deals with Countdown */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.45 }}
+        >
+          <FlashDeals />
         </motion.div>
         
         {/* Featured Pizzas - only show on pizza categories */}
