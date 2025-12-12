@@ -18,13 +18,15 @@ import {
   Clock,
   ChefHat,
   Flame,
-  Settings
+  Settings,
+  BarChart3
 } from 'lucide-react';
 import { AdminOrders } from '@/components/admin/AdminOrders';
 import { AdminProducts } from '@/components/admin/AdminProducts';
 import { AdminCustomers } from '@/components/admin/AdminCustomers';
 import { AdminRevenue } from '@/components/admin/AdminRevenue';
 import { AdminSettings } from '@/components/admin/AdminSettings';
+import { AdminStats } from '@/components/admin/AdminStats';
 import { toast } from 'sonner';
 
 interface DashboardStats {
@@ -300,8 +302,15 @@ const AdminDashboard = () => {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="orders" className="space-y-6">
+        <Tabs defaultValue="stats" className="space-y-6">
           <TabsList className="bg-black/40 border border-orange-500/20 p-1.5 h-auto flex-wrap">
+            <TabsTrigger 
+              value="stats" 
+              className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-red-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-orange-500/30 px-5 py-2.5 rounded-lg transition-all"
+            >
+              <BarChart3 className="h-4 w-4" />
+              <span>Dashboard</span>
+            </TabsTrigger>
             <TabsTrigger 
               value="orders" 
               className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-red-500 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-orange-500/30 px-5 py-2.5 rounded-lg transition-all"
@@ -340,6 +349,10 @@ const AdminDashboard = () => {
           </TabsList>
 
           <div className="bg-black/30 border border-orange-500/20 rounded-2xl backdrop-blur-sm p-6">
+            <TabsContent value="stats" className="mt-0">
+              <AdminStats />
+            </TabsContent>
+
             <TabsContent value="orders" className="mt-0">
               <AdminOrders />
             </TabsContent>
