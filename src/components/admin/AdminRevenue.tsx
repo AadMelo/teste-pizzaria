@@ -381,7 +381,10 @@ export const AdminRevenue = () => {
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="revenue"
-                      label={({ name, percent }) => `${name.slice(0, 15)}${name.length > 15 ? '...' : ''} (${(percent * 100).toFixed(0)}%)`}
+                      label={({ name, percent }) => {
+                        const displayName = name || 'Produto';
+                        return `${displayName.slice(0, 15)}${displayName.length > 15 ? '...' : ''} (${(percent * 100).toFixed(0)}%)`;
+                      }}
                     >
                       {topProducts.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
