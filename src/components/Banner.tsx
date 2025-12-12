@@ -86,86 +86,80 @@ export default function Banner({ onCategorySelect }: BannerProps) {
   };
 
   return (
-    <div className="relative overflow-hidden mx-3 md:mx-4 mt-3 md:mt-4">
-      {/* Gradient Overlays */}
-      <div className="absolute left-0 top-0 bottom-0 w-8 md:w-16 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-8 md:w-16 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+    <div className="relative overflow-hidden mx-3 md:mx-4 mt-3 md:mt-4 rounded-2xl md:rounded-3xl">
+      {/* Main Banner Container */}
+      <div className="relative h-[280px] sm:h-[320px] md:h-[400px] lg:h-[450px]">
+        {/* Scrolling Track */}
+        <motion.div
+          className="flex h-full"
+          animate={{
+            x: ['0%', '-50%'],
+          }}
+          transition={{
+            x: {
+              repeat: Infinity,
+              repeatType: 'loop',
+              duration: 60,
+              ease: 'linear',
+            },
+          }}
+        >
+          {duplicatedBanners.map((banner, index) => (
+            <div
+              key={`${banner.id}-${index}`}
+              className="flex-shrink-0 w-full h-full relative"
+            >
+              {/* Background Image */}
+              <div className="absolute inset-0">
+                <img
+                  src={banner.image}
+                  alt={banner.title}
+                  className="w-full h-full object-cover"
+                  loading={index < 2 ? 'eager' : 'lazy'}
+                />
+              </div>
 
-      {/* Scrolling Track */}
-      <motion.div
-        className="flex gap-4"
-        animate={{
-          x: [0, -((320 + 16) * banners.length)],
-        }}
-        transition={{
-          x: {
-            repeat: Infinity,
-            repeatType: 'loop',
-            duration: 30,
-            ease: 'linear',
-          },
-        }}
-      >
-        {duplicatedBanners.map((banner, index) => (
-          <motion.div
-            key={`${banner.id}-${index}`}
-            className="flex-shrink-0 w-[280px] md:w-[320px] h-[280px] sm:h-[320px] md:h-[380px] rounded-2xl md:rounded-3xl overflow-hidden relative group cursor-pointer"
-            whileHover={{ scale: 1.02, y: -4 }}
-            transition={{ duration: 0.3 }}
-            onClick={() => handleOrderClick(banner.action)}
-          >
-            {/* Background Image */}
-            <div className="absolute inset-0">
-              <img
-                src={banner.image}
-                alt={banner.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                loading="lazy"
-              />
+              {/* Sophisticated Multi-layer Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-transparent opacity-60" />
+
+              {/* Content */}
+              <div className="relative z-10 h-full flex flex-col justify-center px-6 md:px-12 lg:px-16 max-w-3xl">
+                {/* Badge */}
+                <span className="inline-flex w-fit items-center gap-2 bg-white/10 backdrop-blur-md text-white/90 text-xs md:text-sm font-medium tracking-wide uppercase px-3 md:px-4 py-1.5 md:py-2 rounded-full border border-white/20 mb-3 md:mb-4">
+                  <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-primary animate-pulse" />
+                  {banner.badge}
+                </span>
+
+                {/* Title */}
+                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-2 md:mb-3 tracking-tight leading-tight">
+                  {banner.title}
+                </h2>
+
+                {/* Highlight */}
+                <p className="text-lg md:text-2xl lg:text-3xl font-semibold text-primary mb-2 md:mb-3">
+                  {banner.highlight}
+                </p>
+
+                {/* Description */}
+                <p className="text-sm md:text-base lg:text-lg text-white/80 font-light mb-4 md:mb-6 max-w-md leading-relaxed hidden sm:block">
+                  {banner.description}
+                </p>
+
+                {/* CTA Button */}
+                <Button
+                  className="group w-fit bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-5 md:px-8 py-2.5 md:py-3 text-sm md:text-base rounded-full shadow-xl transition-all duration-300 h-10 md:h-12"
+                  onClick={() => handleOrderClick(banner.action)}
+                >
+                  Ver Cardápio
+                  <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </div>
             </div>
-
-            {/* Overlay Gradients */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-transparent opacity-60" />
-
-            {/* Content */}
-            <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-6">
-              {/* Badge */}
-              <span className="inline-flex w-fit items-center gap-2 bg-white/10 backdrop-blur-md text-white/90 text-xs font-medium tracking-wide uppercase px-3 py-1.5 rounded-full border border-white/20 mb-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                {banner.badge}
-              </span>
-
-              {/* Title */}
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-1 tracking-tight leading-tight">
-                {banner.title}
-              </h2>
-
-              {/* Highlight */}
-              <p className="text-base md:text-lg font-semibold text-primary mb-1">
-                {banner.highlight}
-              </p>
-
-              {/* Description */}
-              <p className="text-xs md:text-sm text-white/70 font-light mb-4 leading-relaxed line-clamp-2">
-                {banner.description}
-              </p>
-
-              {/* CTA Button */}
-              <Button
-                className="group/btn w-fit bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 md:px-6 py-2 text-sm rounded-full shadow-xl transition-all duration-300 h-9 md:h-10"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleOrderClick(banner.action);
-                }}
-              >
-                Ver Cardápio
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-              </Button>
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
+          ))}
+        </motion.div>
+      </div>
     </div>
   );
 }
