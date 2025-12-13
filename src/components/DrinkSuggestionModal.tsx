@@ -1,28 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, ShoppingCart, X } from 'lucide-react';
-import { useProducts, Product } from '@/hooks/useProducts';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Check, ShoppingCart, X, Loader2 } from 'lucide-react';
+import { Product } from '@/hooks/useProducts';
 
 interface DrinkSuggestionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (selectedDrinks: Product[]) => void;
   pizzaName: string;
+  drinks: Product[];
 }
 
 export default function DrinkSuggestionModal({ 
   isOpen, 
   onClose, 
   onConfirm,
-  pizzaName 
+  pizzaName,
+  drinks
 }: DrinkSuggestionModalProps) {
-  const { products } = useProducts();
   const [selectedDrinks, setSelectedDrinks] = useState<Product[]>([]);
 
-  const drinks = products.filter(p => p.category === 'bebida');
+  // Reset selection when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedDrinks([]);
+    }
+  }, [isOpen]);
 
   const toggleDrink = (drink: Product) => {
     setSelectedDrinks(prev => {
@@ -36,20 +41,18 @@ export default function DrinkSuggestionModal({
 
   const handleConfirm = () => {
     onConfirm(selectedDrinks);
-    setSelectedDrinks([]);
   };
 
   const handleSkip = () => {
     onConfirm([]);
-    setSelectedDrinks([]);
   };
 
   const totalDrinks = selectedDrinks.reduce((acc, d) => acc + d.price, 0);
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-md max-h-[85vh] flex flex-col bg-background">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-md max-h-[90vh] flex flex-col bg-background border-border">
+        <DialogHeader className="pb-2">
           <DialogTitle className="flex items-center gap-2 text-lg">
             🥤 Adicionar bebida?
           </DialogTitle>
@@ -58,48 +61,55 @@ export default function DrinkSuggestionModal({
           </p>
         </DialogHeader>
 
-        <ScrollArea className="flex-1 max-h-[50vh] pr-2">
-          <div className="grid grid-cols-2 gap-2">
-            {drinks.map((drink) => {
-              const isSelected = selectedDrinks.some(d => d.id === drink.id);
-              return (
-                <button
-                  key={drink.id}
-                  onClick={() => toggleDrink(drink)}
-                  className={`relative p-2 rounded-lg border-2 transition-all text-left ${
-                    isSelected 
-                      ? 'border-primary bg-primary/10' 
-                      : 'border-border hover:border-primary/50 bg-card'
-                  }`}
-                >
-                  {isSelected && (
-                    <div className="absolute top-1 right-1 bg-primary text-primary-foreground rounded-full p-0.5">
-                      <Check className="h-3 w-3" />
+        <div className="flex-1 overflow-y-auto max-h-[55vh] pr-1 -mr-1">
+          {drinks.length === 0 ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2 pb-2">
+              {drinks.map((drink) => {
+                const isSelected = selectedDrinks.some(d => d.id === drink.id);
+                return (
+                  <button
+                    key={drink.id}
+                    onClick={() => toggleDrink(drink)}
+                    className={`relative p-2 rounded-lg border-2 transition-all text-left ${
+                      isSelected 
+                        ? 'border-primary bg-primary/10' 
+                        : 'border-border hover:border-primary/50 bg-card'
+                    }`}
+                  >
+                    {isSelected && (
+                      <div className="absolute top-1 right-1 bg-primary text-primary-foreground rounded-full p-0.5 z-10">
+                        <Check className="h-3 w-3" />
+                      </div>
+                    )}
+                    <div className="aspect-square rounded-md overflow-hidden mb-1.5 bg-muted">
+                      <img 
+                        src={drink.image} 
+                        alt={drink.name}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
                     </div>
-                  )}
-                  <div className="aspect-square rounded-md overflow-hidden mb-1.5">
-                    <img 
-                      src={drink.image} 
-                      alt={drink.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <p className="font-medium text-xs line-clamp-1">{drink.name}</p>
-                  {drink.size && (
-                    <Badge variant="secondary" className="text-[9px] px-1 py-0 mt-0.5">
-                      {drink.size}
-                    </Badge>
-                  )}
-                  <p className="text-primary font-bold text-sm mt-1">
-                    R$ {drink.price.toFixed(2).replace('.', ',')}
-                  </p>
-                </button>
-              );
-            })}
-          </div>
-        </ScrollArea>
+                    <p className="font-medium text-xs line-clamp-1">{drink.name}</p>
+                    {drink.size && (
+                      <Badge variant="secondary" className="text-[9px] px-1 py-0 mt-0.5">
+                        {drink.size}
+                      </Badge>
+                    )}
+                    <p className="text-primary font-bold text-sm mt-1">
+                      R$ {drink.price.toFixed(2).replace('.', ',')}
+                    </p>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
 
-        <DialogFooter className="flex-col gap-2 sm:flex-col">
+        <div className="flex flex-col gap-2 pt-2 border-t border-border">
           {selectedDrinks.length > 0 && (
             <div className="w-full text-center py-2 bg-primary/10 rounded-lg">
               <p className="text-sm">
@@ -128,7 +138,7 @@ export default function DrinkSuggestionModal({
               Adicionar
             </Button>
           </div>
-        </DialogFooter>
+        </div>
       </DialogContent>
     </Dialog>
   );
