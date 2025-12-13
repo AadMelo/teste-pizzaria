@@ -17,11 +17,12 @@ import Testimonials from '@/components/Testimonials';
 import Footer from '@/components/Footer';
 import SocialProofNotification from '@/components/SocialProofNotification';
 import FloatingCartButton from '@/components/FloatingCartButton';
-import { pizzas, products, Pizza, Product } from '@/data/pizzaData';
+import { useProducts, Pizza, Product } from '@/hooks/useProducts';
 import { useCart } from '@/contexts/CartContext';
 import { useOrderNotifications } from '@/hooks/useOrderNotifications';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 export default function Index() {
   const [selectedCategory, setSelectedCategory] = useState('todas');
@@ -31,6 +32,7 @@ export default function Index() {
   const { addProductToCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { pizzas, products, loading } = useProducts();
   
   // Subscribe to order status notifications
   useOrderNotifications();
@@ -118,6 +120,14 @@ export default function Index() {
     }
     return filteredPizzas.length;
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <motion.div 
