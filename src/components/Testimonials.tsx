@@ -82,13 +82,13 @@ export default function Testimonials() {
   const duplicatedTestimonials = [...testimonials, ...testimonials];
 
   return (
-    <section className="py-6 overflow-hidden">
-      <div className="px-3 md:px-4 mb-4">
-        <h2 className="text-lg md:text-xl font-bold flex items-center gap-2">
-          <span className="text-2xl">💬</span>
+    <section className="py-4 md:py-6 overflow-hidden">
+      <div className="px-3 md:px-4 mb-3 md:mb-4">
+        <h2 className="text-base md:text-xl font-bold flex items-center gap-2">
+          <span className="text-xl md:text-2xl">💬</span>
           O que nossos clientes dizem
         </h2>
-        <p className="text-muted-foreground text-sm mt-1">
+        <p className="text-muted-foreground text-xs md:text-sm mt-0.5">
           Mais de 5.000 avaliações positivas
         </p>
       </div>
@@ -96,12 +96,12 @@ export default function Testimonials() {
       {/* Marquee Container */}
       <div className="relative">
         {/* Gradient Overlays */}
-        <div className="absolute left-0 top-0 bottom-0 w-12 md:w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-12 md:w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-8 md:w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 md:w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
         
         {/* Scrolling Track */}
         <motion.div
-          className="flex gap-4 py-2"
+          className="flex gap-3 md:gap-4 py-1 md:py-2"
           animate={{
             x: [0, -50 * testimonials.length * 4.5],
           }}
@@ -117,40 +117,40 @@ export default function Testimonials() {
           {duplicatedTestimonials.map((testimonial, index) => (
             <motion.div
               key={`${testimonial.id}-${index}`}
-              className="flex-shrink-0 w-[280px] md:w-[320px]"
+              className="flex-shrink-0 w-[220px] md:w-[320px]"
               whileHover={{ scale: 1.02, y: -4 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="bg-card border border-border/50 rounded-2xl p-4 h-full shadow-lg hover:shadow-xl transition-shadow duration-300 backdrop-blur-sm">
+              <div className="bg-card border border-border/50 rounded-xl md:rounded-2xl p-3 md:p-4 h-full shadow-md hover:shadow-xl transition-shadow duration-300 backdrop-blur-sm">
                 {/* Header */}
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
                   <div className="relative">
                     <img
                       src={testimonial.avatar}
                       alt={testimonial.name}
-                      className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20"
+                      className="w-8 h-8 md:w-12 md:h-12 rounded-full object-cover ring-2 ring-primary/20"
                     />
-                    <div className="absolute -bottom-1 -right-1 bg-green-500 w-4 h-4 rounded-full border-2 border-card" />
+                    <div className="absolute -bottom-0.5 -right-0.5 bg-green-500 w-2.5 h-2.5 md:w-4 md:h-4 rounded-full border-2 border-card" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sm truncate">{testimonial.name}</h3>
-                    <div className="flex items-center gap-1">
+                    <h3 className="font-semibold text-xs md:text-sm truncate">{testimonial.name}</h3>
+                    <div className="flex items-center gap-0.5">
                       {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                        <Star key={i} className="w-2.5 h-2.5 md:w-3 md:h-3 fill-yellow-400 text-yellow-400" />
                       ))}
                     </div>
                   </div>
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">{testimonial.date}</span>
+                  <span className="text-[10px] md:text-xs text-muted-foreground whitespace-nowrap">{testimonial.date}</span>
                 </div>
                 
                 {/* Content */}
-                <p className="text-sm text-foreground/90 leading-relaxed">
+                <p className="text-xs md:text-sm text-foreground/90 leading-relaxed line-clamp-2 md:line-clamp-none">
                   "{testimonial.text}"
                 </p>
                 
                 {/* Verified Badge */}
-                <div className="mt-3 flex items-center gap-1.5 text-xs text-green-600">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <div className="mt-2 md:mt-3 flex items-center gap-1 text-[10px] md:text-xs text-green-600">
+                  <svg className="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <span>Compra verificada</span>
@@ -162,21 +162,21 @@ export default function Testimonials() {
       </div>
 
       {/* Stats Bar */}
-      <div className="px-3 md:px-4 mt-6">
-        <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-2xl p-4 flex items-center justify-around">
+      <div className="px-3 md:px-4 mt-4 md:mt-6">
+        <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-xl md:rounded-2xl p-3 md:p-4 flex items-center justify-around">
           <div className="text-center">
-            <p className="text-xl md:text-2xl font-bold text-primary">4.9</p>
-            <p className="text-xs text-muted-foreground">Avaliação</p>
+            <p className="text-lg md:text-2xl font-bold text-primary">4.9</p>
+            <p className="text-[10px] md:text-xs text-muted-foreground">Avaliação</p>
           </div>
-          <div className="w-px h-8 bg-border" />
+          <div className="w-px h-6 md:h-8 bg-border" />
           <div className="text-center">
-            <p className="text-xl md:text-2xl font-bold text-primary">5k+</p>
-            <p className="text-xs text-muted-foreground">Avaliações</p>
+            <p className="text-lg md:text-2xl font-bold text-primary">5k+</p>
+            <p className="text-[10px] md:text-xs text-muted-foreground">Avaliações</p>
           </div>
-          <div className="w-px h-8 bg-border" />
+          <div className="w-px h-6 md:h-8 bg-border" />
           <div className="text-center">
-            <p className="text-xl md:text-2xl font-bold text-primary">98%</p>
-            <p className="text-xs text-muted-foreground">Recomendam</p>
+            <p className="text-lg md:text-2xl font-bold text-primary">98%</p>
+            <p className="text-[10px] md:text-xs text-muted-foreground">Recomendam</p>
           </div>
         </div>
       </div>
