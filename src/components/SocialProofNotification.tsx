@@ -196,20 +196,20 @@ const SocialProofNotification = () => {
           animate={{ opacity: 1, x: 0, y: 0 }}
           exit={{ opacity: 0, x: -100 }}
           transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-          className="fixed bottom-20 left-4 z-50 max-w-[320px] md:bottom-6 md:left-6"
+          className="fixed bottom-16 left-3 z-50 max-w-[280px] md:max-w-[320px] md:bottom-6 md:left-6"
         >
-          <div className="bg-card border border-border/50 rounded-xl shadow-lg overflow-hidden">
+          <div className="bg-card border border-border/50 rounded-lg md:rounded-xl shadow-lg overflow-hidden">
             {/* Progress bar */}
             <motion.div
               initial={{ scaleX: 1 }}
               animate={{ scaleX: 0 }}
               transition={{ duration: 6, ease: 'linear' }}
-              className="h-1 bg-gradient-to-r from-pizza-orange to-pizza-red origin-left"
+              className="h-0.5 md:h-1 bg-gradient-to-r from-pizza-orange to-pizza-red origin-left"
             />
             
-            <div className="p-3 flex items-start gap-3">
+            <div className="p-2 md:p-3 flex items-start gap-2 md:gap-3">
               {/* Pizza Image */}
-              <div className="flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-muted">
+              <div className="flex-shrink-0 w-10 h-10 md:w-14 md:h-14 rounded-lg overflow-hidden bg-muted">
                 <img 
                   src={notification.pizzaImage} 
                   alt={notification.pizzaName}
@@ -222,25 +222,25 @@ const SocialProofNotification = () => {
               
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5 mb-0.5">
-                  <ShoppingBag className="w-3.5 h-3.5 text-pizza-orange" />
-                  <span className="text-xs text-muted-foreground">Novo pedido</span>
+                <div className="flex items-center gap-1 mb-0.5">
+                  <ShoppingBag className="w-3 h-3 md:w-3.5 md:h-3.5 text-pizza-orange" />
+                  <span className="text-[10px] md:text-xs text-muted-foreground">Novo pedido</span>
                   {notification.isReal && (
-                    <span className="relative flex h-2 w-2">
+                    <span className="relative flex h-1.5 w-1.5 md:h-2 md:w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 md:h-2 md:w-2 bg-green-500"></span>
                     </span>
                   )}
                 </div>
-                <p className="text-sm font-medium text-foreground">
+                <p className="text-xs md:text-sm font-medium text-foreground">
                   <span className="text-pizza-orange font-semibold">{notification.name}</span> pediu
                 </p>
-                <p className="text-sm text-foreground font-semibold truncate">
+                <p className="text-xs md:text-sm text-foreground font-semibold truncate">
                   Pizza {notification.pizzaName}
                 </p>
-                <div className="flex items-center gap-1 mt-1">
-                  <MapPin className="w-3 h-3 text-muted-foreground" />
-                  <span className="text-[11px] text-muted-foreground">
+                <div className="flex items-center gap-1 mt-0.5 md:mt-1">
+                  <MapPin className="w-2.5 h-2.5 md:w-3 md:h-3 text-muted-foreground" />
+                  <span className="text-[9px] md:text-[11px] text-muted-foreground">
                     {notification.neighborhood} • {notification.time}
                   </span>
                 </div>
@@ -249,9 +249,9 @@ const SocialProofNotification = () => {
               {/* Close button */}
               <button
                 onClick={handleClose}
-                className="flex-shrink-0 p-1 rounded-full hover:bg-muted/50 transition-colors"
+                className="flex-shrink-0 p-0.5 md:p-1 rounded-full hover:bg-muted/50 transition-colors"
               >
-                <X className="w-4 h-4 text-muted-foreground" />
+                <X className="w-3.5 h-3.5 md:w-4 md:h-4 text-muted-foreground" />
               </button>
             </div>
           </div>
