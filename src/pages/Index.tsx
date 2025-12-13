@@ -110,7 +110,7 @@ export default function Index() {
     >
       <Header onSearch={setSearchQuery} />
       
-      <main className="max-w-7xl mx-auto pb-6 md:pb-8 px-0 md:px-4">
+      <main className="max-w-7xl mx-auto pb-6 md:pb-8 px-3 sm:px-4 md:px-6">
         {/* Banner */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
