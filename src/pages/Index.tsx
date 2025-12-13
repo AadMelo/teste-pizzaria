@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Banner from '@/components/Banner';
 import HeroHighlights from '@/components/HeroHighlights';
@@ -19,6 +20,7 @@ import FloatingCartButton from '@/components/FloatingCartButton';
 import { pizzas, products, Pizza, Product } from '@/data/pizzaData';
 import { useCart } from '@/contexts/CartContext';
 import { useOrderNotifications } from '@/hooks/useOrderNotifications';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 
 export default function Index() {
@@ -27,9 +29,21 @@ export default function Index() {
   const [selectedPizza, setSelectedPizza] = useState<Pizza | null>(null);
   const [isBuilderOpen, setIsBuilderOpen] = useState(false);
   const { addProductToCart } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   
   // Subscribe to order status notifications
   useOrderNotifications();
+
+  // Check authentication before allowing menu interaction
+  const requireAuth = (callback: () => void) => {
+    if (!user) {
+      toast.info('Faça login para montar seu pedido!');
+      navigate('/auth');
+      return;
+    }
+    callback();
+  };
 
   const filteredPizzas = useMemo(() => {
     if (['bebida', 'sobremesa', 'porcao'].includes(selectedCategory)) {
@@ -56,8 +70,10 @@ export default function Index() {
   }, [searchQuery, selectedCategory]);
 
   const handleSelectPizza = (pizza: Pizza) => {
-    setSelectedPizza(pizza);
-    setIsBuilderOpen(true);
+    requireAuth(() => {
+      setSelectedPizza(pizza);
+      setIsBuilderOpen(true);
+    });
   };
 
   const handleCloseBuilder = () => {
@@ -66,8 +82,10 @@ export default function Index() {
   };
 
   const handleAddProduct = (product: Product) => {
-    addProductToCart(product);
-    toast.success(`${product.name} adicionado ao carrinho!`);
+    requireAuth(() => {
+      addProductToCart(product);
+      toast.success(`${product.name} adicionado ao carrinho!`);
+    });
   };
 
   const handleBannerCategorySelect = (category: string) => {
