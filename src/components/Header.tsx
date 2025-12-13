@@ -106,11 +106,12 @@ export default function Header({ onSearch }: HeaderProps) {
                 {/* Meus Pedidos - Sempre visível */}
                 <Button
                   variant="ghost"
-                  size="icon"
+                  size="sm"
                   onClick={() => navigate('/pedidos')}
-                  className="h-10 w-10 flex-shrink-0 bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 hover:text-orange-700"
+                  className="flex-shrink-0 gap-1.5 px-2 sm:px-3 h-9 bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 hover:text-orange-700 border border-orange-300/30"
                 >
-                  <Package className="h-5 w-5" />
+                  <Package className="h-4 w-4" />
+                  <span className="text-xs font-semibold">Pedidos</span>
                 </Button>
               
                 {/* Loyalty Program - Visível em telas maiores */}
