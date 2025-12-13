@@ -228,7 +228,7 @@ export default function Checkout({ onBack }: CheckoutProps) {
       } else {
         // Send to WhatsApp for payment on delivery
         const message = formatOrderMessage();
-        const phoneNumber = '5511999999999';
+        const phoneNumber = '5589994130455';
         const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
         
         window.open(whatsappUrl, '_blank');
