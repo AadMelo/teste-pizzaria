@@ -167,7 +167,7 @@ const HeroHighlights = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="relative overflow-hidden bg-gradient-to-r from-pizza-brown/90 to-pizza-brown 
-                   rounded-2xl p-4 text-white"
+                   rounded-2xl p-4"
       >
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
         
@@ -185,12 +185,12 @@ const HeroHighlights = () => {
                   const Icon = highlights[activeHighlight].icon;
                   return (
                     <>
-                      <div className="p-2 rounded-xl bg-white/10 backdrop-blur-sm">
+                      <div className="p-2 rounded-xl bg-white/20 backdrop-blur-sm">
                         <Icon className={`w-5 h-5 ${highlights[activeHighlight].color}`} />
                       </div>
                       <div>
-                        <p className="text-xs text-white/70 uppercase tracking-wider">Nosso diferencial</p>
-                        <p className="font-semibold text-sm">{highlights[activeHighlight].text}</p>
+                        <p className="text-xs text-white/80 uppercase tracking-wider">Nosso diferencial</p>
+                        <p className="font-semibold text-sm text-white">{highlights[activeHighlight].text}</p>
                       </div>
                     </>
                   );
@@ -205,7 +205,7 @@ const HeroHighlights = () => {
               <motion.div
                 key={i}
                 className={`w-1.5 h-1.5 rounded-full transition-all duration-300 
-                           ${i === activeHighlight ? 'bg-white w-4' : 'bg-white/30'}`}
+                           ${i === activeHighlight ? 'bg-white w-4' : 'bg-white/40'}`}
               />
             ))}
           </div>
