@@ -327,143 +327,140 @@ export const AdminProducts = () => {
               Novo Produto
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-md bg-zinc-900 border-zinc-700">
-            <DialogHeader>
-              <DialogTitle className="text-white">
+          <DialogContent className="max-w-[95vw] sm:max-w-md bg-zinc-900 border-zinc-700 max-h-[90vh] overflow-hidden p-4 sm:p-6">
+            <DialogHeader className="pb-2">
+              <DialogTitle className="text-white text-base sm:text-lg">
                 {editingProduct ? 'Editar Produto' : 'Novo Produto'}
               </DialogTitle>
             </DialogHeader>
-            <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-3 max-h-[65vh] overflow-y-auto pr-1">
+              <div className="space-y-3">
                 <div>
-                  <Label htmlFor="name" className="text-zinc-300">Nome *</Label>
+                  <Label htmlFor="name" className="text-zinc-300 text-xs sm:text-sm">Nome *</Label>
                   <Input
                     id="name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Ex: Pizza Margherita"
-                    className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500"
+                    className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500 h-9 text-sm"
                   />
                 </div>
-                <div>
-                  <Label htmlFor="product_type" className="text-zinc-300">Tipo *</Label>
-                  <Select
-                    value={formData.product_type}
-                    onValueChange={(value) => setFormData({ ...formData, product_type: value })}
-                  >
-                    <SelectTrigger className="bg-black/40 border-zinc-700 text-white">
-                      <SelectValue placeholder="Selecione..." />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-zinc-700">
-                      <SelectItem value="pizza">Pizza</SelectItem>
-                      <SelectItem value="product">Produto</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Label htmlFor="product_type" className="text-zinc-300 text-xs sm:text-sm">Tipo *</Label>
+                    <Select
+                      value={formData.product_type}
+                      onValueChange={(value) => setFormData({ ...formData, product_type: value })}
+                    >
+                      <SelectTrigger className="bg-black/40 border-zinc-700 text-white h-9 text-sm">
+                        <SelectValue placeholder="Selecione..." />
+                      </SelectTrigger>
+                      <SelectContent className="bg-zinc-900 border-zinc-700">
+                        <SelectItem value="pizza">Pizza</SelectItem>
+                        <SelectItem value="product">Produto</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="price" className="text-zinc-300 text-xs sm:text-sm">Preço (R$) *</Label>
+                    <Input
+                      id="price"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={formData.price}
+                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                      placeholder="0.00"
+                      className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500 h-9 text-sm"
+                    />
+                  </div>
                 </div>
               </div>
               
               <div>
-                <Label htmlFor="description" className="text-zinc-300">Descrição</Label>
+                <Label htmlFor="category" className="text-zinc-300 text-xs sm:text-sm">Categoria *</Label>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) => setFormData({ ...formData, category: value })}
+                >
+                  <SelectTrigger className="bg-black/40 border-zinc-700 text-white h-9 text-sm">
+                    <SelectValue placeholder="Selecione..." />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-900 border-zinc-700">
+                    {categories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label htmlFor="description" className="text-zinc-300 text-xs sm:text-sm">Descrição</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Descrição do produto..."
                   rows={2}
-                  className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500"
+                  className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500 text-sm"
                 />
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="price" className="text-zinc-300">Preço (R$) *</Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    placeholder="0.00"
-                    className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="category" className="text-zinc-300">Categoria *</Label>
-                  <Select
-                    value={formData.category}
-                    onValueChange={(value) => setFormData({ ...formData, category: value })}
-                  >
-                    <SelectTrigger className="bg-black/40 border-zinc-700 text-white">
-                      <SelectValue placeholder="Selecione..." />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-zinc-700">
-                      {categories.map((cat) => (
-                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
               </div>
               
               {formData.product_type === 'pizza' && (
                 <div>
-                  <Label htmlFor="ingredients" className="text-zinc-300">Ingredientes (separados por vírgula)</Label>
+                  <Label htmlFor="ingredients" className="text-zinc-300 text-xs sm:text-sm">Ingredientes (separados por vírgula)</Label>
                   <Textarea
                     id="ingredients"
                     value={formData.ingredients}
                     onChange={(e) => setFormData({ ...formData, ingredients: e.target.value })}
                     placeholder="Molho de tomate, Mussarela, Manjericão..."
                     rows={2}
-                    className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500"
+                    className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500 text-sm"
                   />
                 </div>
               )}
               
               {formData.product_type === 'product' && (
                 <div>
-                  <Label htmlFor="size" className="text-zinc-300">Tamanho (opcional)</Label>
+                  <Label htmlFor="size" className="text-zinc-300 text-xs sm:text-sm">Tamanho (opcional)</Label>
                   <Input
                     id="size"
                     value={formData.size}
                     onChange={(e) => setFormData({ ...formData, size: e.target.value })}
                     placeholder="Ex: 350ml, 2L, 500g"
-                    className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500"
+                    className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500 h-9 text-sm"
                   />
                 </div>
               )}
               
-              <div className="space-y-3">
-                <Label className="text-zinc-300">Imagem do Produto</Label>
+              <div className="space-y-2">
+                <Label className="text-zinc-300 text-xs sm:text-sm">Imagem do Produto</Label>
                 
-                {/* Image Preview */}
+                {/* Compact Image Preview for Mobile */}
                 {imagePreview ? (
                   <div className="relative">
                     <img
                       src={imagePreview}
                       alt="Preview"
-                      className="w-full h-40 object-cover rounded-lg border border-zinc-700"
+                      className="w-full h-24 sm:h-32 object-cover rounded-lg border border-zinc-700"
                     />
                     <Button
                       type="button"
                       variant="destructive"
                       size="icon"
-                      className="absolute top-2 right-2 h-8 w-8"
+                      className="absolute top-1 right-1 h-6 w-6"
                       onClick={removeImage}
                     >
-                      <X className="h-4 w-4" />
+                      <X className="h-3 w-3" />
                     </Button>
                   </div>
                 ) : (
                   <div 
-                    className="w-full h-40 border-2 border-dashed border-zinc-700 rounded-lg flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-orange-500/50 hover:bg-orange-500/5 transition-all"
+                    className="w-full h-20 sm:h-28 border-2 border-dashed border-zinc-700 rounded-lg flex flex-col items-center justify-center gap-1 cursor-pointer hover:border-orange-500/50 hover:bg-orange-500/5 transition-all"
                     onClick={() => fileInputRef.current?.click()}
                   >
-                    <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center">
-                      <ImageIcon className="h-6 w-6 text-zinc-500" />
-                    </div>
-                    <p className="text-sm text-zinc-400">Clique para enviar uma imagem</p>
-                    <p className="text-xs text-zinc-500">PNG, JPG até 5MB</p>
+                    <ImageIcon className="h-5 w-5 text-zinc-500" />
+                    <p className="text-xs text-zinc-400">Toque para enviar</p>
                   </div>
                 )}
 
@@ -475,49 +472,43 @@ export const AdminProducts = () => {
                   className="hidden"
                   onChange={handleImageUpload}
                 />
-
+                
                 {/* Upload Button */}
-                <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={uploading}
-                    className="flex-1 border-zinc-700 bg-zinc-800/50 text-zinc-300 hover:bg-zinc-700"
-                  >
-                    {uploading ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Enviando...
-                      </>
-                    ) : (
-                      <>
-                        <Upload className="h-4 w-4 mr-2" />
-                        Enviar Imagem
-                      </>
-                    )}
-                  </Button>
-                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="w-full h-8 border-zinc-700 bg-zinc-800/50 text-zinc-300 hover:bg-zinc-700 hover:text-white text-xs"
+                >
+                  {uploading ? (
+                    <>
+                      <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                      Enviando...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-3 w-3 mr-1" />
+                      {imagePreview ? 'Trocar imagem' : 'Enviar imagem'}
+                    </>
+                  )}
+                </Button>
 
-                {/* URL Input (alternative) */}
-                <div className="pt-2 border-t border-zinc-800">
-                  <Label htmlFor="image_url" className="text-zinc-500 text-xs">Ou insira a URL da imagem</Label>
-                  <Input
-                    id="image_url"
-                    value={formData.image_url}
-                    onChange={(e) => {
-                      setFormData({ ...formData, image_url: e.target.value });
-                      setImagePreview(e.target.value || null);
-                    }}
-                    placeholder="https://exemplo.com/imagem.jpg"
-                    className="mt-1 bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500 text-sm"
-                  />
-                </div>
+                {/* URL Input */}
+                <Input
+                  id="image_url"
+                  value={formData.image_url}
+                  onChange={(e) => {
+                    setFormData({ ...formData, image_url: e.target.value });
+                    setImagePreview(e.target.value || null);
+                  }}
+                  placeholder="Ou cole a URL da imagem"
+                  className="bg-black/40 border-zinc-700 text-white placeholder:text-zinc-500 h-8 text-xs"
+                />
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-black/40 rounded-lg border border-zinc-700">
-                <Label htmlFor="is_available" className="text-zinc-300">Disponível para venda</Label>
+              <div className="flex items-center justify-between p-2 bg-black/40 rounded-lg border border-zinc-700">
+                <Label htmlFor="is_available" className="text-zinc-300 text-xs sm:text-sm">Disponível para venda</Label>
                 <Switch
                   id="is_available"
                   checked={formData.is_available}
@@ -527,18 +518,19 @@ export const AdminProducts = () => {
               
               <Button 
                 onClick={handleSave} 
-                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white" 
+                className="w-full h-9 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-sm" 
                 disabled={saving}
               >
                 {saving ? (
                   <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    <Loader2 className="h-3 w-3 mr-1 animate-spin" />
                     Salvando...
                   </>
                 ) : (
                   'Salvar'
                 )}
               </Button>
+              
             </div>
           </DialogContent>
         </Dialog>
@@ -568,72 +560,54 @@ export const AdminProducts = () => {
       </div>
       
       {/* Mobile View - Cards */}
-      <div className="md:hidden space-y-3">
-        <ScrollArea className="h-[calc(100vh-380px)]">
-          <div className="space-y-3 pr-2">
+      <div className="md:hidden space-y-2">
+        <ScrollArea className="h-[calc(100vh-320px)]">
+          <div className="space-y-2 pr-1">
             {filteredProducts.map((product) => (
-              <Card key={product.id} className="bg-black/40 border-zinc-800">
-                <CardContent className="p-3">
-                  <div className="flex gap-3">
-                    {product.image_url ? (
-                      <img
-                        src={product.image_url}
-                        alt={product.name}
-                        className="w-16 h-16 rounded-lg object-cover border border-zinc-700 flex-shrink-0"
-                      />
-                    ) : (
-                      <div className="w-16 h-16 rounded-lg bg-zinc-800 flex items-center justify-center border border-zinc-700 flex-shrink-0">
-                        <Pizza className="h-8 w-8 text-zinc-600" />
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0 flex-1">
-                          <p className="font-medium text-white truncate">{product.name}</p>
-                          <Badge className="mt-1 bg-orange-500/20 text-orange-300 border-orange-500/30 text-xs">
-                            {product.category}
-                          </Badge>
-                        </div>
-                        <p className="font-bold text-emerald-400 text-sm whitespace-nowrap">
-                          R$ {Number(product.price).toFixed(2)}
-                        </p>
-                      </div>
-                      {product.description && (
-                        <p className="text-xs text-zinc-500 line-clamp-1 mt-1">
-                          {product.description}
-                        </p>
-                      )}
+              <div key={product.id} className="bg-black/40 border border-zinc-800 rounded-lg p-2">
+                <div className="flex items-center gap-2">
+                  {product.image_url ? (
+                    <img
+                      src={product.image_url}
+                      alt={product.name}
+                      className="w-10 h-10 rounded object-cover border border-zinc-700 flex-shrink-0"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded bg-zinc-800 flex items-center justify-center border border-zinc-700 flex-shrink-0">
+                      <Pizza className="h-5 w-5 text-zinc-600" />
                     </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-white truncate">{product.name}</p>
+                    <p className="text-xs text-emerald-400 font-semibold">
+                      R$ {Number(product.price).toFixed(2)}
+                    </p>
                   </div>
-                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-zinc-800">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-zinc-400">Disponível:</span>
-                      <Switch
-                        checked={product.is_available}
-                        onCheckedChange={() => toggleAvailability(product.id, product.is_available)}
-                      />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleOpenDialog(product)}
-                        className="h-8 px-2 border-zinc-700 bg-zinc-800/50 text-zinc-300 hover:bg-zinc-700 hover:text-white"
-                      >
-                        <Pencil className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDelete(product.id)}
-                        className="h-8 px-2 bg-red-500/20 text-red-400 hover:bg-red-500/30 border-red-500/30"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <Switch
+                      checked={product.is_available}
+                      onCheckedChange={() => toggleAvailability(product.id, product.is_available)}
+                      className="scale-75"
+                    />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleOpenDialog(product)}
+                      className="h-7 w-7 text-zinc-400 hover:text-white hover:bg-zinc-700"
+                    >
+                      <Pencil className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDelete(product.id)}
+                      className="h-7 w-7 text-red-400 hover:text-red-300 hover:bg-red-500/20"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
           
