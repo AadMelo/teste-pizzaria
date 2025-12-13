@@ -14,12 +14,12 @@ export default function FloatingCartButton() {
       <Sheet>
         <SheetTrigger asChild>
           <Button 
-            size="lg"
-            className="h-14 w-14 rounded-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 shadow-lg shadow-orange-500/40 animate-scale-in"
+            size="sm"
+            className="h-11 w-11 rounded-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 shadow-lg shadow-orange-500/30 animate-scale-in p-0"
           >
             <div className="relative">
-              <ShoppingCart className="h-6 w-6 text-white" />
-              <span className="absolute -top-3 -right-3 h-5 w-5 rounded-full bg-white text-xs text-orange-600 flex items-center justify-center font-bold shadow-sm">
+              <ShoppingCart className="h-5 w-5 text-white" />
+              <span className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-white text-[10px] text-orange-600 flex items-center justify-center font-bold shadow-sm">
                 {itemCount > 9 ? '9+' : itemCount}
               </span>
             </div>
@@ -29,13 +29,6 @@ export default function FloatingCartButton() {
           <Cart />
         </SheetContent>
       </Sheet>
-      
-      {/* Total Badge */}
-      <div className="absolute -top-2 -left-2 bg-background border border-border rounded-full px-2 py-0.5 shadow-md">
-        <span className="text-xs font-bold text-foreground">
-          R$ {total.toFixed(0)}
-        </span>
-      </div>
     </div>
   );
 }
