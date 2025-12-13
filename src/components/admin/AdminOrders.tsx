@@ -183,12 +183,21 @@ export const AdminOrders = () => {
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     setUpdatingStatus(orderId);
     try {
+      // Atualiza imediatamente o estado local para refletir nas contagens
+      setOrders(prev => prev.map(order => 
+        order.id === orderId ? { ...order, status: newStatus } : order
+      ));
+      
       const { error } = await supabase
         .from('orders')
         .update({ status: newStatus })
         .eq('id', orderId);
 
-      if (error) throw error;
+      if (error) {
+        // Reverte em caso de erro
+        fetchOrders();
+        throw error;
+      }
       
       const statusConfig = getStatusConfig(newStatus);
       toast.success(`Status atualizado: ${statusConfig.label}`, {
@@ -303,7 +312,7 @@ export const AdminOrders = () => {
           <AlertCircle className="h-4 w-4" />
           Ativos ({activeOrdersCount})
         </Button>
-        {orderStatuses.slice(0, 7).map((status) => {
+        {orderStatuses.filter(s => s.key !== 'cancelled').map((status) => {
           const Icon = status.icon;
           const count = statusCounts[status.key] || 0;
           const isActive = statusFilter === status.key;
