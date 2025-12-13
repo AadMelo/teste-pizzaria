@@ -1,7 +1,11 @@
-import { Plus } from 'lucide-react';
-import { Pizza } from '@/data/pizzaData';
+import { ShoppingCart, Settings2 } from 'lucide-react';
+import { Pizza, pizzaSizes, pizzaCrusts, pizzaDoughs } from '@/data/pizzaData';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useCart, CartPizza } from '@/contexts/CartContext';
+import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 interface PizzaCardProps {
   pizza: Pizza;
@@ -9,11 +13,45 @@ interface PizzaCardProps {
 }
 
 export default function PizzaCard({ pizza, onSelect }: PizzaCardProps) {
+  const { addToCart } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  
   const categoryColors = {
     tradicional: 'bg-green-500/20 text-green-700 dark:text-green-400',
     especial: 'bg-blue-500/20 text-blue-700 dark:text-blue-400',
     premium: 'bg-amber-500/20 text-amber-700 dark:text-amber-400',
     doce: 'bg-pink-500/20 text-pink-700 dark:text-pink-400',
+  };
+
+  const handleQuickAdd = () => {
+    if (!user) {
+      toast.info('Faça login para montar seu pedido!');
+      navigate('/auth');
+      return;
+    }
+    
+    // Default: Grande size, no crust, traditional dough, no extras
+    const defaultSize = pizzaSizes.find(s => s.id === 'grande')!;
+    const defaultCrust = pizzaCrusts.find(c => c.id === 'sem')!;
+    const defaultDough = pizzaDoughs.find(d => d.id === 'tradicional')!;
+    
+    const totalPrice = (pizza.basePrice * defaultSize.priceMultiplier) + defaultCrust.price + defaultDough.price;
+    
+    const cartPizza: CartPizza = {
+      id: `pizza-${pizza.id}-${Date.now()}`,
+      type: 'pizza',
+      size: defaultSize,
+      flavors: [pizza],
+      crust: defaultCrust,
+      dough: defaultDough,
+      extras: [],
+      quantity: 1,
+      totalPrice,
+    };
+    
+    addToCart(cartPizza);
+    toast.success(`${pizza.name} Grande adicionada ao carrinho!`);
   };
 
   return (
@@ -41,20 +79,32 @@ export default function PizzaCard({ pizza, onSelect }: PizzaCardProps) {
           {pizza.ingredients.slice(0, 3).join(', ')}
         </p>
         
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <div>
             <p className="text-xs text-muted-foreground">A partir</p>
             <p className="text-base md:text-lg font-bold text-primary">
               R$ {pizza.basePrice.toFixed(2).replace('.', ',')}
             </p>
           </div>
-          <Button
-            onClick={() => onSelect(pizza)}
-            className="rounded-full bg-primary hover:bg-primary/90 h-10 w-10 md:h-11 md:w-11 transition-all duration-200 hover:scale-110 active:scale-95"
-            size="icon"
-          >
-            <Plus className="h-5 w-5 md:h-6 md:w-6" />
-          </Button>
+          <div className="flex gap-1.5">
+            <Button
+              onClick={handleQuickAdd}
+              className="rounded-full bg-primary hover:bg-primary/90 h-9 w-9 md:h-10 md:w-10 transition-all duration-200 hover:scale-110 active:scale-95"
+              size="icon"
+              title="Adicionar pizza grande padrão"
+            >
+              <ShoppingCart className="h-4 w-4 md:h-5 md:w-5" />
+            </Button>
+            <Button
+              onClick={() => onSelect(pizza)}
+              variant="outline"
+              className="rounded-full h-9 w-9 md:h-10 md:w-10 transition-all duration-200 hover:scale-110 active:scale-95 border-primary/50 hover:bg-primary/10"
+              size="icon"
+              title="Personalizar pizza"
+            >
+              <Settings2 className="h-4 w-4 md:h-5 md:w-5 text-primary" />
+            </Button>
+          </div>
         </div>
       </div>
     </div>
