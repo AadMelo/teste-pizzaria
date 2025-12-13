@@ -583,19 +583,25 @@ export const AdminProducts = () => {
                       R$ {Number(product.price).toFixed(2)}
                     </p>
                   </div>
-                  <div className="flex items-center gap-1 flex-shrink-0">
+                </div>
+                <div className="flex items-center justify-between mt-2 pt-2 border-t border-zinc-800">
+                  <div className="flex items-center gap-1">
                     <Switch
                       checked={product.is_available}
                       onCheckedChange={() => toggleAvailability(product.id, product.is_available)}
                       className="scale-75"
                     />
+                    <span className="text-xs text-zinc-500">Ativo</span>
+                  </div>
+                  <div className="flex items-center gap-2">
                     <Button
-                      variant="ghost"
-                      size="icon"
+                      variant="outline"
+                      size="sm"
                       onClick={() => handleOpenDialog(product)}
-                      className="h-7 w-7 text-zinc-400 hover:text-white hover:bg-zinc-700"
+                      className="h-7 px-3 text-xs border-zinc-700 bg-zinc-800/50 text-zinc-300 hover:bg-zinc-700 hover:text-white"
                     >
-                      <Pencil className="h-3 w-3" />
+                      <Pencil className="h-3 w-3 mr-1" />
+                      Editar
                     </Button>
                     <Button
                       variant="ghost"
