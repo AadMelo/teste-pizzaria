@@ -116,6 +116,7 @@ export default function Index() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
+          className="mb-6 md:mb-4"
         >
           <Banner onCategorySelect={handleBannerCategorySelect} />
         </motion.div>
@@ -125,6 +126,7 @@ export default function Index() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
+          className="mb-6 md:mb-4"
         >
           <HeroHighlights />
         </motion.div>
@@ -134,6 +136,7 @@ export default function Index() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
+          className="mb-6 md:mb-4"
         >
           <StoreInfo />
         </motion.div>
@@ -143,6 +146,7 @@ export default function Index() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
+          className="mb-6 md:mb-4"
         >
           <HowItWorks />
         </motion.div>
@@ -152,6 +156,7 @@ export default function Index() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
+          className="mb-6 md:mb-4"
         >
           <SpecialOffers />
         </motion.div>
@@ -162,6 +167,7 @@ export default function Index() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
+            className="mb-6 md:mb-4"
           >
             <FeaturedPizzas pizzas={pizzas} onSelect={handleSelectPizza} />
           </motion.div>
@@ -172,6 +178,7 @@ export default function Index() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
+          className="mb-6 md:mb-4"
         >
           <Categories selected={selectedCategory} onSelect={setSelectedCategory} />
         </motion.div>
