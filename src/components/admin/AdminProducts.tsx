@@ -567,7 +567,87 @@ export const AdminProducts = () => {
         </Select>
       </div>
       
-      <Card className="bg-black/40 border-zinc-800">
+      {/* Mobile View - Cards */}
+      <div className="md:hidden space-y-3">
+        <ScrollArea className="h-[calc(100vh-380px)]">
+          <div className="space-y-3 pr-2">
+            {filteredProducts.map((product) => (
+              <Card key={product.id} className="bg-black/40 border-zinc-800">
+                <CardContent className="p-3">
+                  <div className="flex gap-3">
+                    {product.image_url ? (
+                      <img
+                        src={product.image_url}
+                        alt={product.name}
+                        className="w-16 h-16 rounded-lg object-cover border border-zinc-700 flex-shrink-0"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-lg bg-zinc-800 flex items-center justify-center border border-zinc-700 flex-shrink-0">
+                        <Pizza className="h-8 w-8 text-zinc-600" />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0 flex-1">
+                          <p className="font-medium text-white truncate">{product.name}</p>
+                          <Badge className="mt-1 bg-orange-500/20 text-orange-300 border-orange-500/30 text-xs">
+                            {product.category}
+                          </Badge>
+                        </div>
+                        <p className="font-bold text-emerald-400 text-sm whitespace-nowrap">
+                          R$ {Number(product.price).toFixed(2)}
+                        </p>
+                      </div>
+                      {product.description && (
+                        <p className="text-xs text-zinc-500 line-clamp-1 mt-1">
+                          {product.description}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-zinc-800">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-zinc-400">Disponível:</span>
+                      <Switch
+                        checked={product.is_available}
+                        onCheckedChange={() => toggleAvailability(product.id, product.is_available)}
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleOpenDialog(product)}
+                        className="h-8 px-2 border-zinc-700 bg-zinc-800/50 text-zinc-300 hover:bg-zinc-700 hover:text-white"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleDelete(product.id)}
+                        className="h-8 px-2 bg-red-500/20 text-red-400 hover:bg-red-500/30 border-red-500/30"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          
+          {filteredProducts.length === 0 && (
+            <div className="text-center py-12 text-zinc-500">
+              <Pizza className="h-12 w-12 mx-auto mb-3 opacity-50" />
+              <p>Nenhum produto encontrado</p>
+            </div>
+          )}
+        </ScrollArea>
+      </div>
+
+      {/* Desktop View - Table */}
+      <Card className="hidden md:block bg-black/40 border-zinc-800">
         <CardContent className="p-0">
           <ScrollArea className="h-[600px]">
             <Table>
