@@ -13,14 +13,16 @@ import Categories from '@/components/Categories';
 import PizzaCard from '@/components/PizzaCard';
 import ProductCard from '@/components/ProductCard';
 import PizzaBuilder from '@/components/PizzaBuilder';
+import DrinkSuggestionModal from '@/components/DrinkSuggestionModal';
 import Testimonials from '@/components/Testimonials';
 import Footer from '@/components/Footer';
 import SocialProofNotification from '@/components/SocialProofNotification';
 import FloatingCartButton from '@/components/FloatingCartButton';
 import { useProducts, Pizza, Product } from '@/hooks/useProducts';
-import { useCart } from '@/contexts/CartContext';
+import { useCart, CartPizza } from '@/contexts/CartContext';
 import { useOrderNotifications } from '@/hooks/useOrderNotifications';
 import { useAuth } from '@/hooks/useAuth';
+import { pizzaSizes, pizzaCrusts, pizzaDoughs } from '@/data/pizzaData';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 
@@ -29,13 +31,20 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPizza, setSelectedPizza] = useState<Pizza | null>(null);
   const [isBuilderOpen, setIsBuilderOpen] = useState(false);
-  const { addProductToCart } = useCart();
+  const [showDrinkModal, setShowDrinkModal] = useState(false);
+  const [quickAddPizza, setQuickAddPizza] = useState<Pizza | null>(null);
+  const { addToCart, addProductToCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { pizzas, products, loading } = useProducts();
   
   // Subscribe to order status notifications
   useOrderNotifications();
+
+  // Get drinks from products
+  const drinks = useMemo(() => {
+    return products.filter(p => p.category === 'bebida');
+  }, [products]);
 
   // Check authentication before allowing menu interaction
   const requireAuth = (callback: () => void) => {
@@ -76,6 +85,50 @@ export default function Index() {
       setSelectedPizza(pizza);
       setIsBuilderOpen(true);
     });
+  };
+
+  const handleQuickAddPizza = (pizza: Pizza) => {
+    setQuickAddPizza(pizza);
+    setShowDrinkModal(true);
+  };
+
+  const handleDrinkConfirm = (selectedDrinks: Product[]) => {
+    if (!quickAddPizza) return;
+
+    // Add pizza with default options
+    const defaultSize = pizzaSizes.find(s => s.id === 'grande')!;
+    const defaultCrust = pizzaCrusts.find(c => c.id === 'sem')!;
+    const defaultDough = pizzaDoughs.find(d => d.id === 'tradicional')!;
+    
+    const totalPrice = (quickAddPizza.basePrice * defaultSize.priceMultiplier) + defaultCrust.price + defaultDough.price;
+    
+    const cartPizza: CartPizza = {
+      id: `pizza-${quickAddPizza.id}-${Date.now()}`,
+      type: 'pizza',
+      size: defaultSize,
+      flavors: [quickAddPizza as any],
+      crust: defaultCrust,
+      dough: defaultDough,
+      extras: [],
+      quantity: 1,
+      totalPrice,
+    };
+    
+    addToCart(cartPizza);
+    
+    // Add selected drinks
+    selectedDrinks.forEach(drink => {
+      addProductToCart(drink);
+    });
+    
+    setShowDrinkModal(false);
+    setQuickAddPizza(null);
+    
+    if (selectedDrinks.length > 0) {
+      toast.success(`${quickAddPizza.name} + ${selectedDrinks.length} bebida(s) adicionados!`);
+    } else {
+      toast.success(`${quickAddPizza.name} Grande adicionada ao carrinho!`);
+    }
   };
 
   const handleCloseBuilder = () => {
@@ -291,6 +344,7 @@ export default function Index() {
                   <PizzaCard
                     pizza={pizza}
                     onSelect={handleSelectPizza}
+                    onQuickAdd={handleQuickAddPizza}
                   />
                 </motion.div>
               ))}
@@ -324,6 +378,18 @@ export default function Index() {
         isOpen={isBuilderOpen}
         onClose={handleCloseBuilder}
         initialPizza={selectedPizza || undefined}
+      />
+
+      {/* Drink Suggestion Modal */}
+      <DrinkSuggestionModal
+        isOpen={showDrinkModal}
+        onClose={() => {
+          setShowDrinkModal(false);
+          setQuickAddPizza(null);
+        }}
+        onConfirm={handleDrinkConfirm}
+        pizzaName={quickAddPizza?.name || ''}
+        drinks={drinks}
       />
 
       {/* Social Proof Notifications */}
