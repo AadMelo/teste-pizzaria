@@ -57,7 +57,7 @@ export default function Index() {
       const matchesCategory = selectedCategory === 'todas' || pizza.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [searchQuery, selectedCategory]);
+  }, [pizzas, searchQuery, selectedCategory]);
 
   const filteredProducts = useMemo(() => {
     if (!['bebida', 'sobremesa', 'porcao'].includes(selectedCategory)) {
@@ -69,7 +69,7 @@ export default function Index() {
       const matchesCategory = product.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [searchQuery, selectedCategory]);
+  }, [products, searchQuery, selectedCategory]);
 
   const handleSelectPizza = (pizza: Pizza) => {
     requireAuth(() => {
