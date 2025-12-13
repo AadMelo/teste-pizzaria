@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { X, Check, Search, Plus, Minus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,20 +7,17 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import {
-  Pizza,
   PizzaSize,
   PizzaCrust,
   PizzaDough,
   PizzaExtra,
-  Product,
-  pizzas,
   pizzaSizes,
   pizzaCrusts,
   pizzaDoughs,
   pizzaExtras,
-  products,
   categories,
 } from '@/data/pizzaData';
+import { useProducts, Pizza, Product } from '@/hooks/useProducts';
 import { useCart, CartPizza } from '@/contexts/CartContext';
 import { toast } from 'sonner';
 
@@ -43,11 +40,14 @@ const steps: { id: BuilderStep; label: string }[] = [
   { id: 'review', label: 'Resumo' },
 ];
 
-// Filter only drinks from products
-const drinkProducts = products.filter((p) => p.category === 'bebida');
-
 export default function PizzaBuilder({ isOpen, onClose, initialPizza }: PizzaBuilderProps) {
   const { addToCart, addProductToCart } = useCart();
+  const { pizzas, products } = useProducts();
+  
+  // Filter only drinks from products
+  const drinkProducts = useMemo(() => {
+    return products.filter((p) => p.category === 'bebida');
+  }, [products]);
   
   const [currentStep, setCurrentStep] = useState<BuilderStep>('size');
   const [selectedSize, setSelectedSize] = useState<PizzaSize | null>(null);
@@ -70,7 +70,7 @@ export default function PizzaBuilder({ isOpen, onClose, initialPizza }: PizzaBui
       const matchesCategory = filterCategory === 'todas' || pizza.category === filterCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [searchQuery, filterCategory]);
+  }, [pizzas, searchQuery, filterCategory]);
 
   const drinksTotal = useMemo(() => {
     return selectedDrinks.reduce((acc, d) => acc + d.product.price * d.quantity, 0);
