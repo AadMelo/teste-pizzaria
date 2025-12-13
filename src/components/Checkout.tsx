@@ -53,8 +53,10 @@ export default function Checkout({ onBack }: CheckoutProps) {
   // Calculate final total with points discount
   const finalTotal = total - pointsDiscount;
 
-  const formatOrderMessage = () => {
+  const formatOrderMessage = (customerName: string) => {
     let message = '🍕 *NOVO PEDIDO - EXPRESSO DELIVERY*\n\n';
+    
+    message += `*👤 CLIENTE:* ${customerName}\n\n`;
     
     message += '*📋 ITENS DO PEDIDO:*\n';
     items.forEach((item, index) => {
@@ -181,6 +183,9 @@ export default function Checkout({ onBack }: CheckoutProps) {
 
       const fullAddress = `${address.street}, ${address.number}${address.complement ? ` - ${address.complement}` : ''}, ${address.neighborhood}, CEP: ${address.cep}`;
 
+      // Get customer name from profile or user metadata
+      const customerName = user?.user_metadata?.name || 'Cliente';
+
       if (user) {
         // Save order to database
         const { data: orderData, error: orderError } = await supabase
@@ -224,10 +229,16 @@ export default function Checkout({ onBack }: CheckoutProps) {
 
       // For online payments (PIX), don't redirect to WhatsApp
       if (paidOnline) {
+        // Send receipt to WhatsApp even for PIX payments
+        const message = formatOrderMessage(customerName);
+        const phoneNumber = '5589994130455';
+        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+        window.open(whatsappUrl, '_blank');
+        
         toast.success('Pagamento confirmado! Seu pedido está sendo preparado. 🍕');
       } else {
         // Send to WhatsApp for payment on delivery
-        const message = formatOrderMessage();
+        const message = formatOrderMessage(customerName);
         const phoneNumber = '5589994130455';
         const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
         

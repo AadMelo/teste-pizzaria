@@ -594,7 +594,8 @@ export default function OrderHistory() {
               ...receiptOrder,
               items: Array.isArray(receiptOrder.items) 
                 ? (receiptOrder.items as unknown as { type: string; name?: string; size?: string; flavors?: string[]; quantity: number; price: number }[])
-                : []
+                : [],
+              customer_name: user?.user_metadata?.name || 'Cliente'
             }}
             open={!!receiptOrder}
             onClose={() => setReceiptOrder(null)}
