@@ -15,6 +15,7 @@ import PizzaBuilder from '@/components/PizzaBuilder';
 import Testimonials from '@/components/Testimonials';
 import Footer from '@/components/Footer';
 import SocialProofNotification from '@/components/SocialProofNotification';
+import FloatingCartButton from '@/components/FloatingCartButton';
 import { pizzas, products, Pizza, Product } from '@/data/pizzaData';
 import { useCart } from '@/contexts/CartContext';
 import { useOrderNotifications } from '@/hooks/useOrderNotifications';
@@ -292,6 +293,9 @@ export default function Index() {
 
       {/* Social Proof Notifications */}
       <SocialProofNotification />
+
+      {/* Floating Cart Button - Mobile */}
+      <FloatingCartButton />
     </motion.div>
   );
 }
