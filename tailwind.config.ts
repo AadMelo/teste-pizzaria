@@ -57,6 +57,11 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        "pizza-red": "hsl(var(--pizza-red))",
+        "pizza-orange": "hsl(var(--pizza-orange))",
+        "pizza-yellow": "hsl(var(--pizza-yellow))",
+        "pizza-cream": "hsl(var(--pizza-cream))",
+        "pizza-brown": "hsl(25, 30%, 25%)",
       },
       borderRadius: {
         lg: "var(--radius)",
