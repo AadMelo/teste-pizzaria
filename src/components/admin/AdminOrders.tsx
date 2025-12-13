@@ -23,6 +23,12 @@ import { cn } from '@/lib/utils';
 import { OrderProgressBar } from '@/components/OrderProgressBar';
 import adminOrdersHero from '@/assets/admin-orders-hero.jpg';
 
+interface Profile {
+  user_id: string;
+  name: string | null;
+  phone: string | null;
+}
+
 interface Order {
   id: string;
   user_id: string;
@@ -36,6 +42,7 @@ interface Order {
   address: string;
   created_at: string;
   points_earned: number;
+  customer_name?: string;
 }
 
 const orderStatuses = [
@@ -159,16 +166,28 @@ export const AdminOrders = () => {
 
   const fetchOrders = async () => {
     try {
-      const { data, error } = await supabase
+      // Fetch orders
+      const { data: ordersData, error: ordersError } = await supabase
         .from('orders')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (ordersError) throw ordersError;
       
-      const ordersWithParsedItems = data?.map(order => ({
+      // Fetch all profiles to get customer names
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('user_id, name, phone');
+      
+      const profilesMap = new Map<string, Profile>();
+      profilesData?.forEach(profile => {
+        profilesMap.set(profile.user_id, profile);
+      });
+      
+      const ordersWithParsedItems = ordersData?.map(order => ({
         ...order,
-        items: typeof order.items === 'string' ? JSON.parse(order.items) : order.items
+        items: typeof order.items === 'string' ? JSON.parse(order.items) : order.items,
+        customer_name: profilesMap.get(order.user_id)?.name || 'Cliente'
       })) || [];
       
       setOrders(ordersWithParsedItems);
@@ -455,17 +474,20 @@ export const AdminOrders = () => {
                           <StatusIcon className="h-5 w-5 text-white" />
                         </div>
                         <div>
-                          <p className="font-bold text-white text-lg">
-                            #{order.id.slice(0, 8).toUpperCase()}
-                          </p>
-                          <p className="text-xs text-zinc-400">
-                            {format(new Date(order.created_at), "dd/MM 'às' HH:mm", { locale: ptBR })}
-                          </p>
-                        </div>
-                      </div>
-                      <Badge className={cn(statusConfig.color, "text-white border-0 font-medium")}>
-                        {statusConfig.label}
-                      </Badge>
+                                          <p className="font-bold text-white text-lg">
+                                            #{order.id.slice(0, 8).toUpperCase()}
+                                          </p>
+                                          <p className="text-sm text-orange-300 font-medium">
+                                            👤 {order.customer_name || 'Cliente'}
+                                          </p>
+                                          <p className="text-xs text-zinc-400">
+                                            {format(new Date(order.created_at), "dd/MM 'às' HH:mm", { locale: ptBR })}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <Badge className={cn(statusConfig.color, "text-white border-0 font-medium")}>
+                                        {statusConfig.label}
+                                      </Badge>
                     </div>
 
                     {/* Progress Bar */}
@@ -562,6 +584,10 @@ export const AdminOrders = () => {
 
                                 {/* Order Info Grid */}
                                 <div className="grid grid-cols-2 gap-4">
+                                  <div className="space-y-1 col-span-2">
+                                    <p className="text-xs text-zinc-500 uppercase tracking-wide">Cliente</p>
+                                    <p className="text-lg font-bold text-orange-400">👤 {selectedOrder.customer_name || 'Cliente'}</p>
+                                  </div>
                                   <div className="space-y-1">
                                     <p className="text-xs text-zinc-500 uppercase tracking-wide">ID do Pedido</p>
                                     <p className="font-mono text-sm text-white">{selectedOrder.id}</p>

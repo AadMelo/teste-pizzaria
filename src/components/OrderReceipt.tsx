@@ -27,6 +27,7 @@ interface OrderReceiptProps {
     address: string;
     payment_method: string;
     items: OrderItem[];
+    customer_name?: string;
   };
   open: boolean;
   onClose: () => void;
@@ -151,6 +152,12 @@ export function OrderReceipt({ order, open, onClose }: OrderReceiptProps) {
 
           {/* Order Info */}
           <div className="my-4 space-y-2">
+            {order.customer_name && (
+              <div className="flex justify-between text-xs">
+                <span className="text-muted-foreground">Cliente:</span>
+                <span className="font-bold">{order.customer_name}</span>
+              </div>
+            )}
             <div className="flex justify-between text-xs">
               <span className="text-muted-foreground">Pedido:</span>
               <span className="font-bold">#{order.id.slice(0, 8).toUpperCase()}</span>
