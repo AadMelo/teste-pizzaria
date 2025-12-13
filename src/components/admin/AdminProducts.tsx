@@ -248,8 +248,6 @@ export const AdminProducts = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Tem certeza que deseja excluir este produto?')) return;
-
     try {
       const { error } = await supabase
         .from('products')
