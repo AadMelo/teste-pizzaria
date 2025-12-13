@@ -83,30 +83,47 @@ export default function Header({ onSearch }: HeaderProps) {
 
           {/* Actions */}
           <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2">
+            {/* Cart - Sempre visível e primeiro no mobile */}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative touch-target h-10 w-10 flex-shrink-0">
+                  <ShoppingCart className="h-5 w-5 md:h-5 md:w-5" />
+                  {itemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-xs text-primary-foreground flex items-center justify-center font-bold animate-pulse">
+                      {itemCount > 9 ? '9+' : itemCount}
+                    </span>
+                  )}
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="w-full sm:max-w-lg overflow-y-auto p-0">
+                <Cart />
+              </SheetContent>
+            </Sheet>
+
             {/* User / Auth */}
             {user ? (
               <>
-                {/* Meus Pedidos - Botão destacado e visível */}
+                {/* Meus Pedidos - Visível em telas maiores */}
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => navigate('/pedidos')}
-                  className="relative gap-1 px-1.5 sm:px-2.5 bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 hover:text-orange-700 border border-orange-300/50 touch-target"
+                  className="hidden sm:flex relative gap-1 px-2.5 bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 hover:text-orange-700 border border-orange-300/50"
                 >
                   <Package className="h-4 w-4 shrink-0" />
-                  <span className="text-[9px] xs:text-[10px] sm:text-xs font-bold whitespace-nowrap">Pedidos</span>
+                  <span className="text-xs font-bold whitespace-nowrap">Pedidos</span>
                 </Button>
               
-                {/* Loyalty Program */}
+                {/* Loyalty Program - Visível em telas maiores */}
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="relative gap-1.5 px-2.5 sm:px-3"
+                      className="hidden sm:flex relative gap-1.5 px-2.5"
                     >
-                      <Gift className="h-6 w-6 md:h-5 md:w-5 text-amber-500" />
-                      <span className="hidden sm:inline text-sm font-bold text-amber-600">{userPoints} pts</span>
+                      <Gift className="h-5 w-5 text-amber-500" />
+                      <span className="text-sm font-bold text-amber-600">{userPoints} pts</span>
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
@@ -122,18 +139,40 @@ export default function Header({ onSearch }: HeaderProps) {
                 {/* User Menu */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-10 w-10">
-                      <User className="h-6 w-6 md:h-5 md:w-5" />
+                    <Button variant="ghost" size="icon" className="h-10 w-10 flex-shrink-0">
+                      <User className="h-5 w-5" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
+                  <DropdownMenuContent align="end" className="w-56">
                     <div className="px-2 py-1.5">
                       <p className="text-sm font-medium">{profile?.name || 'Usuário'}</p>
                       <p className="text-xs text-muted-foreground">{user.email}</p>
+                      <p className="text-xs text-amber-600 font-medium mt-1">🎁 {userPoints} pontos</p>
                     </div>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigate('/pedidos')}>
+                      <Package className="h-4 w-4 mr-2" />
+                      Meus Pedidos
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Dialog>
+                        <DialogTrigger className="flex w-full items-center px-2 py-1.5 text-sm cursor-pointer hover:bg-accent rounded-sm">
+                          <Gift className="h-4 w-4 mr-2 text-amber-500" />
+                          Programa Fidelidade
+                        </DialogTrigger>
+                        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle className="text-center pizza-gradient-text">
+                              🎁 Programa Fidelidade
+                            </DialogTitle>
+                          </DialogHeader>
+                          <LoyaltyProgram />
+                        </DialogContent>
+                      </Dialog>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut}>
-                      <LogOut className="h-5 w-5 mr-2" />
+                      <LogOut className="h-4 w-4 mr-2" />
                       Sair
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -142,24 +181,23 @@ export default function Header({ onSearch }: HeaderProps) {
             ) : (
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
                 onClick={() => navigate('/auth')}
-                className="gap-1.5"
+                className="h-10 w-10 flex-shrink-0"
               >
-                <User className="h-6 w-6 md:h-5 md:w-5" />
-                <span className="hidden sm:inline">Entrar</span>
+                <User className="h-5 w-5" />
               </Button>
             )}
 
-            {/* Theme Toggle */}
+            {/* Theme Toggle - Hidden on mobile */}
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
-              className="relative h-10 w-10"
+              className="relative h-10 w-10 hidden sm:flex"
             >
-              <Sun className="h-6 w-6 md:h-5 md:w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-6 w-6 md:h-5 md:w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
               <span className="sr-only">Alternar tema</span>
             </Button>
 
@@ -167,28 +205,11 @@ export default function Header({ onSearch }: HeaderProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden h-10 w-10"
+              className="md:hidden h-10 w-10 flex-shrink-0"
               onClick={() => setIsOpen(!isOpen)}
             >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
-
-            {/* Cart */}
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative touch-target h-10 w-10">
-                  <ShoppingCart className="h-6 w-6 md:h-5 md:w-5" />
-                  {itemCount > 0 && (
-                    <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-xs text-primary-foreground flex items-center justify-center font-bold">
-                      {itemCount > 9 ? '9+' : itemCount}
-                    </span>
-                  )}
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="w-full sm:max-w-lg overflow-y-auto p-0">
-                <Cart />
-              </SheetContent>
-            </Sheet>
           </div>
         </div>
 
