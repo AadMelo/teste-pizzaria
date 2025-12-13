@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ShoppingCart, Settings2 } from 'lucide-react';
-import { Pizza, pizzaSizes, pizzaCrusts, pizzaDoughs, Product } from '@/data/pizzaData';
+import { Pizza, pizzaSizes, pizzaCrusts, pizzaDoughs } from '@/data/pizzaData';
+import { Product } from '@/hooks/useProducts';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useCart, CartPizza } from '@/contexts/CartContext';

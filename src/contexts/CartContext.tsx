@@ -1,5 +1,16 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Pizza, PizzaSize, PizzaCrust, PizzaDough, PizzaExtra, Product } from '@/data/pizzaData';
+import { Pizza, PizzaSize, PizzaCrust, PizzaDough, PizzaExtra } from '@/data/pizzaData';
+
+// Generic product interface for cart compatibility
+export interface CartProductData {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  price: number;
+  image: string;
+  size?: string;
+}
 
 export interface CartPizza {
   id: string;
@@ -17,7 +28,7 @@ export interface CartPizza {
 export interface CartProduct {
   id: string;
   type: 'product';
-  product: Product;
+  product: CartProductData;
   quantity: number;
   totalPrice: number;
 }
@@ -27,7 +38,7 @@ export type CartItem = CartPizza | CartProduct;
 interface CartContextType {
   items: CartItem[];
   addToCart: (item: CartItem) => void;
-  addProductToCart: (product: Product) => void;
+  addProductToCart: (product: CartProductData) => void;
   removeFromCart: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
@@ -47,7 +58,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((prev) => [...prev, item]);
   };
 
-  const addProductToCart = (product: Product) => {
+  const addProductToCart = (product: CartProductData) => {
     // Check if product already exists in cart
     const existingItem = items.find(
       (item) => item.type === 'product' && item.product.id === product.id

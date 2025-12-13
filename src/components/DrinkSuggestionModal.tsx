@@ -3,8 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check, ShoppingCart, X } from 'lucide-react';
-import { Product } from '@/data/pizzaData';
-import { useProducts } from '@/hooks/useProducts';
+import { useProducts, Product } from '@/hooks/useProducts';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface DrinkSuggestionModalProps {
